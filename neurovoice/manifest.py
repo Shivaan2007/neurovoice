@@ -42,9 +42,18 @@ def parse_mdvr_kcl(root=None):
     return rows
 
 
+def check_one_label_per_speaker(df):
+    """A speaker with two labels means an ID clash, which would corrupt grouped splits."""
+    n_labels = df.groupby("speaker_id")["label"].nunique()
+    bad = sorted(n_labels[n_labels > 1].index)
+    if bad:
+        raise ValueError(f"Speakers with more than one label: {bad}")
+
+
 def build_manifest():
     rows = parse_mdvr_kcl()
     df = pd.DataFrame(rows, columns=MANIFEST_COLUMNS)
+    check_one_label_per_speaker(df)
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(MANIFEST_PATH, index=False)
     return df

@@ -25,7 +25,7 @@ def test_health():
 
 
 def test_predict_has_fields_and_notice():
-    r = client.post("/predict", files={"file": ("a.wav", _wav(3))})
+    r = client.post("/predict", files={"file": ("a.wav", _wav(6))})
     assert r.status_code == 200
     body = r.json()
     assert {"probability", "band", "model_version", "notice"} <= body.keys()
@@ -34,4 +34,10 @@ def test_predict_has_fields_and_notice():
 
 def test_bad_file_rejected():
     assert client.post("/predict", files={"file": ("a.txt", b"x")}).status_code == 400
-    assert client.post("/predict", files={"file": ("a.wav", _wav(1))}).status_code == 400
+    assert client.post("/predict", files={"file": ("a.wav", _wav(3))}).status_code == 400
+
+
+def test_oversized_upload_rejected(monkeypatch):
+    import api.main
+    monkeypatch.setattr(api.main, "MAX_UPLOAD_BYTES", 1000)
+    assert client.post("/predict", files={"file": ("a.wav", _wav(6))}).status_code == 413

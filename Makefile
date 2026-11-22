@@ -5,5 +5,6 @@ test:
 	pytest -q
 lint:
 	ruff check .
+# Runs every step that exists so far. Add `python -m neurovoice.train` here when it lands.
 reproduce:
-	python -m neurovoice.manifest && python -m neurovoice.train && python -m neurovoice.evaluate
+	python -m neurovoice.manifest && python -m experiments.mdvr_segment_check
