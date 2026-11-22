@@ -1,0 +1,4 @@
+model,auroc_naive_random,auroc_subject_grouped,grouped_ci95,auroc_grouped_subject_level,inflation
+logreg,0.866,0.777,0.724-0.829,0.81,0.089
+svm_rbf,0.883,0.8,0.740-0.856,0.818,0.083
+random_forest,0.949,0.832,0.779-0.882,0.845,0.117
