@@ -7,4 +7,5 @@ lint:
 	ruff check .
 # Runs every step that exists so far. Add `python -m neurovoice.train` here when it lands.
 reproduce:
-	python -m neurovoice.manifest && python -m experiments.mdvr_segment_check
+	python -m neurovoice.manifest && python -m experiments.mdvr_segment_check && \
+	python -m experiments.uci_leakage
