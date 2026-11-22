@@ -11,8 +11,9 @@ META_PATH = ROOT / "models" / "meta.json"
 
 SAMPLE_RATE = 16_000  # 16 kHz mono
 SEED = 42
-MIN_SECONDS = 2.0
+MIN_SECONDS = 5.0  # matches the app's "5 to 20 seconds" instruction
 MAX_SECONDS = 30.0
+MAX_UPLOAD_BYTES = 20_000_000  # 20 MB is far more than 30 s of audio needs
 
 MANIFEST_COLUMNS = [
     "file", "speaker_id", "label", "dataset", "language", "task",
