@@ -1,0 +1,17 @@
+numpy
+scipy
+pandas
+scikit-learn
+librosa
+praat-parselmouth
+soundfile
+shap
+joblib
+fastapi
+uvicorn
+python-multipart
+requests
+streamlit
+pytest
+httpx
+ruff
