@@ -27,7 +27,8 @@ def parse_mdvr_kcl(root=None):
         with wave.open(str(path), "rb") as w:
             rate, frames = w.getframerate(), w.getnframes()
         rows.append({
-            "file": str(path.relative_to(root.parent.parent.parent)),
+            # as_posix: forward slashes, so a manifest built on Windows also works on Linux
+            "file": path.relative_to(root.parent.parent.parent).as_posix(),
             "speaker_id": f"mdvr_kcl_{int(m.group(1)):02d}",
             "label": int(group == "PD"),
             "dataset": "mdvr_kcl",
