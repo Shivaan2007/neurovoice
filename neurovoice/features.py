@@ -53,3 +53,16 @@ def _praat_features(y: np.ndarray) -> dict[str, float]:
 
 def extract_features(path: str) -> dict[str, float]:
     return features_from_signal(load_audio(path))
+
+
+WINDOW_SECONDS = 5
+
+
+def window_features(y: np.ndarray, seconds: float = WINDOW_SECONDS) -> list[dict[str, float]]:
+    """Features for each full window of `seconds` (same cut as the segment check).
+
+    Training and the app both use this, so a 20 s clip in the app is scored the same way
+    the model was trained: per 5 s window, then averaged. Returns [] if no full window.
+    """
+    win = int(seconds * SAMPLE_RATE)
+    return [features_from_signal(y[i * win:(i + 1) * win]) for i in range(len(y) // win)]
