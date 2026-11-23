@@ -25,7 +25,7 @@ Many windows per person leak more than three recordings per person. Every model 
 | SVM | 0.660 (0.496-0.826) | 0.729 | 0.225 |
 | **Random Forest (deployed)** | **0.716 (0.562-0.877)** | **0.774** | 0.204 |
 
-Calibrated (sigmoid, nested inside speaker-grouped CV). The app says "higher" above 0.6, a cut tuned until it was right 80% of the time on the held-out windows it was fit on (about 19% of windows, from 23 of 37 speakers). That 80% is in-sample. When the cut is chosen on some speakers and checked on others, "higher" was right about 74% of the time overall, and between 15% and 100% depending on the fold, each fold resting on only 4 to 7 speakers (`results/threshold_crossfit.csv`). Treat "higher" as a weak signal. No cut reached 80% for "lower", so the model never says it; everything else is "not enough confidence". See [docs/model_card.md](docs/model_card.md).
+Calibrated (sigmoid, nested inside speaker-grouped CV). The app says "higher" above 0.6, a cut tuned until it was right 80% of the time on the held-out windows it was fit on (about 18.5% of windows, from 23 of 37 speakers). That 80% is in-sample. When the cut is chosen on some speakers and checked on others, "higher" was right about 74% of the time overall, and between 15% and 100% depending on the fold, each fold resting on only 4 to 7 speakers (`results/threshold_crossfit.csv`). Treat "higher" as a weak signal. No cut reached 80% for "lower", so the model never says it; everything else is "not enough confidence". See [docs/model_card.md](docs/model_card.md).
 
 **Unseen dataset (leave-one-dataset-out):** _pending_ (needs the Italian and NeuroVoz loaders).
 
