@@ -2,6 +2,7 @@
 numpy==2.5.5
 scipy==1.18.1
 pandas==3.1.1
+openpyxl==3.1.5
 scikit-learn==1.9.1
 librosa==1.0.1
 praat-parselmouth==0.4.7
