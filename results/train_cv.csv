@@ -1,4 +1,4 @@
-model,auroc_window,window_ci95,auroc_speaker,brier,ece
-logreg,0.526,0.359-0.696,0.577,0.247,0.079
-svm_rbf,0.66,0.496-0.826,0.729,0.225,0.112
-random_forest,0.716,0.562-0.877,0.774,0.204,0.104
+model,auroc_window,window_ci95,auroc_speaker,speaker_ci95,brier,ece
+logreg,0.526,0.359-0.696,0.577,0.385-0.770,0.247,0.079
+svm_rbf,0.66,0.496-0.826,0.729,0.530-0.909,0.225,0.112
+random_forest,0.716,0.562-0.877,0.777,0.587-0.948,0.204,0.105

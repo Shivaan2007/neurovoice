@@ -18,9 +18,9 @@
   "unseen_speakers_mdvr_kcl_random_forest": {
     "auroc_window": 0.716,
     "window_ci95": "0.562-0.877",
-    "auroc_speaker": 0.774,
+    "auroc_speaker": 0.777,
     "brier": 0.204,
-    "ece": 0.104,
+    "ece": 0.105,
     "source": "results/train_cv.csv"
   },
   "operating_point_at_0.5": {

@@ -1,3 +1,3 @@
-features,model,auroc_window,window_ci95,auroc_speaker,brier,ece
-wav2vec2-base (mean-pooled),logreg,0.759,0.617-0.881,0.842,0.189,0.1
-wav2vec2-base (mean-pooled),random_forest,0.709,0.571-0.841,0.789,0.208,0.105
+features,model,auroc_window,window_ci95,auroc_speaker,speaker_ci95,brier,ece
+wav2vec2-base (mean-pooled),logreg,0.759,0.617-0.881,0.842,0.667-0.973,0.189,0.1
+wav2vec2-base (mean-pooled),random_forest,0.709,0.571-0.841,0.789,0.599-0.960,0.208,0.105

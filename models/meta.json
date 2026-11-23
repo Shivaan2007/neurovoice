@@ -2,6 +2,11 @@
   "model_version": "mdvr-kcl-random_forest-v1",
   "model": "random_forest",
   "trained_on": "MDVR-KCL read text (English, smartphone), 5 s windows",
+  "training_datasets": [
+    "mdvr_kcl"
+  ],
+  "cross_dataset_headline": "pending: no unseen-dataset result yet (experiments/cross_dataset.py needs the Italian data)",
+  "limits": "NeuroVoice is a screening-support research prototype. It is not a diagnosis. The model was trained on English speech from 37 people in one dataset, has not been tested on other languages, microphones or rooms, and has no clinical validation. Please talk to a doctor about any concerns.",
   "n_speakers": 37,
   "n_windows": 1001,
   "window_seconds": 5,
@@ -61,16 +66,6 @@
     "uncertain": 0.815,
     "higher": 0.185
   },
-  "cv": {
-    "auroc_window": 0.716,
-    "window_ci95": "0.562-0.877",
-    "auroc_speaker": 0.774,
-    "brier": 0.204,
-    "ece": 0.104
-  },
-  "selection_note": "Best of 3 models on the same CV, so its score is slightly optimistic; all three are in results/train_cv.csv.",
-  "trained": "2026-11-22",
-  "sklearn": "1.9.1",
   "band_precision": {
     "higher_in_sample": 0.8,
     "higher_crossfit": 0.743,
@@ -83,5 +78,16 @@
       0.625
     ],
     "note": "in_sample is what the cut was tuned on and is optimistic; crossfit picks the cut on other speakers and is the number to quote."
-  }
+  },
+  "cv": {
+    "auroc_window": 0.716,
+    "window_ci95": "0.562-0.877",
+    "auroc_speaker": 0.777,
+    "speaker_ci95": "0.587-0.948",
+    "brier": 0.204,
+    "ece": 0.105
+  },
+  "selection_note": "Best of 3 models on the same CV, so its score is slightly optimistic; all three are in results/train_cv.csv.",
+  "trained": "2026-11-23",
+  "sklearn": "1.9.0"
 }

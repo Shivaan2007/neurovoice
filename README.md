@@ -2,7 +2,7 @@
 
 **A Parkinson's voice screening-support research prototype that tests how well voice models hold up on speakers and datasets they've never seen.**
 
-> Research prototype. Not a diagnosis, not clinically validated. Small cohorts, three languages.
+> Research prototype. Not a diagnosis, not clinically validated. The deployed model was trained on English speech from 37 people in one dataset and has not been tested on other languages or recording setups.
 
 ## Results
 
@@ -19,11 +19,11 @@ Many windows per person leak more than three recordings per person. Every model 
 
 **Demo model: MDVR-KCL, held-out speakers only** ([`results/train_cv.csv`](results/train_cv.csv))
 
-| Model | Window AUROC (95% CI) | Speaker-level AUROC | Brier |
+| Model | Window AUROC (95% CI) | Speaker-level AUROC (95% CI) | Brier |
 |---|---|---|---|
-| Logistic regression | 0.526 (0.359-0.696) | 0.577 | 0.247 |
-| SVM | 0.660 (0.496-0.826) | 0.729 | 0.225 |
-| **Random Forest (deployed)** | **0.716 (0.562-0.877)** | **0.774** | 0.204 |
+| Logistic regression | 0.526 (0.359-0.696) | 0.577 (0.385-0.770) | 0.247 |
+| SVM | 0.660 (0.496-0.826) | 0.729 (0.530-0.909) | 0.225 |
+| **Random Forest (deployed)** | **0.716 (0.562-0.877)** | **0.777 (0.587-0.948)** | 0.204 |
 
 Calibrated (sigmoid, nested inside speaker-grouped CV). The app says "higher" above 0.6, a cut tuned until it was right 80% of the time on the held-out windows it was fit on (about 18.5% of windows, from 23 of 37 speakers). That 80% is in-sample. When the cut is chosen on some speakers and checked on others, "higher" was right about 74% of the time overall, and between 15% and 100% depending on the fold, each fold resting on only 4 to 7 speakers (`results/threshold_crossfit.csv`). Treat "higher" as a weak signal. No cut reached 80% for "lower", so the model never says it; everything else is "not enough confidence". See [docs/model_card.md](docs/model_card.md).
 
@@ -68,7 +68,7 @@ MDVR-KCL (Zenodo), Italian Parkinson's Voice and Speech (IEEE DataPort), NeuroVo
 
 ## Methods
 
-Audio is resampled to 16 kHz mono, trimmed, and cut into 5 s windows. Features per window: MFCC 1-13 (mean/std/delta), pyin pitch, RMS, spectral centroid, ZCR, plus Praat jitter, shimmer, HNR. As a comparison (not used by the app), wav2vec2-base embeddings mean-pooled per window with logistic regression score window AUROC 0.759 (0.617-0.881) and speaker AUROC 0.842 on the same speaker-grouped CV, against 0.716 (0.562-0.877) and 0.774 for the hand-built Random Forest; the intervals overlap heavily, so this is not a clear gain (`results/embeddings_mdvr.csv`; needs `pip install torch transformers`, not in `requirements.txt`). Logistic regression, SVM and Random Forest; `StratifiedGroupKFold` by speaker; scaling and calibration fit inside training folds only. The app scores each 5 s window of a clip and averages, the same way the model was trained.
+Audio is resampled to 16 kHz mono, trimmed, and cut into 5 s windows. Features per window: MFCC 1-13 (mean/std/delta), pyin pitch, RMS, spectral centroid, ZCR, plus Praat jitter, shimmer, HNR. As a comparison (not used by the app), wav2vec2-base embeddings mean-pooled per window with logistic regression score window AUROC 0.759 (0.617-0.881) and speaker AUROC 0.842 (0.667-0.973) on the same speaker-grouped CV, against 0.716 (0.562-0.877) and 0.777 (0.587-0.948) for the hand-built Random Forest; the intervals overlap heavily, so this is not a clear gain (`results/embeddings_mdvr.csv`; needs `pip install torch transformers`, not in `requirements.txt`). Logistic regression, SVM and Random Forest; `StratifiedGroupKFold` by speaker; scaling and calibration fit inside training folds only. The app scores each 5 s window of a clip and averages, the same way the model was trained.
 
 ## Reproduce
 
@@ -95,7 +95,7 @@ The app uses `models/model.joblib` (Random Forest trained on MDVR-KCL). If the m
 
 ## Limitations and ethics
 
-Small cohorts, three languages, different recording gear per dataset, medication state uncontrolled, no clinical validation. Not for diagnosis. Uploaded audio is deleted right after prediction. NeuroVoz weights are not shared until its license is confirmed.
+Small cohorts, one language in the deployed model (three across the datasets we study), different recording gear per dataset, medication state uncontrolled, no clinical validation. Not for diagnosis. Uploaded audio is deleted right after prediction. NeuroVoz weights are not shared until its license is confirmed.
 
 ## Status
 
