@@ -41,11 +41,11 @@ The model was picked as the best of logistic regression, SVM and Random Forest o
 
 From held-out window probabilities:
 
-- `higher` uses the smallest cut where windows above it were PD at least 80% of the time, and it must cover windows from at least 5 different speakers. That cut is 0.6, and it covers about 19% of held-out windows (23 of 37 speakers). **That 80% is in-sample:** the cut was tuned on the same held-out predictions it is scored on.
+- `higher` uses the smallest cut where windows above it were PD at least 80% of the time, and it must cover windows from at least 5 different speakers. That cut is 0.6, and it covers about 18.5% of held-out windows (23 of 37 speakers). **That 80% is in-sample:** the cut was tuned on the same held-out predictions it is scored on.
 - **Honest estimate (cross-fitted):** choosing the cut on some speakers and measuring on the others, `higher` was right about 74% of the time overall. Per fold it was 91%, 100%, 60%, 15% and 62%, each fold resting on only 4 to 7 speakers. Quote 74%, not 80%, and treat `higher` as a weak signal. See `results/threshold_crossfit.csv` and `band_precision` in `models/meta.json`.
 - `lower` would use the largest cut where windows below it were healthy at least 80% of the time. **No cut reached that**, so the model never says `lower`.
 - The cut was tuned on single 5 s windows, but the app averages a clip's windows before applying it, so clip-level precision has not been measured.
-- About 81% of held-out windows fall in `uncertain`.
+- About 81.5% of held-out windows fall in `uncertain`.
 
 In plain terms: when this model is unsure, it says so, and it currently cannot reliably reassure anyone.
 
