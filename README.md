@@ -68,7 +68,7 @@ MDVR-KCL (Zenodo), Italian Parkinson's Voice and Speech (IEEE DataPort), NeuroVo
 
 ## Methods
 
-Audio is resampled to 16 kHz mono, trimmed, and cut into 5 s windows. Features per window: MFCC 1-13 (mean/std/delta), pyin pitch, RMS, spectral centroid, ZCR, plus Praat jitter, shimmer, HNR (wav2vec2-base embeddings planned). Logistic regression, SVM and Random Forest; `StratifiedGroupKFold` by speaker; scaling and calibration fit inside training folds only. The app scores each 5 s window of a clip and averages, the same way the model was trained.
+Audio is resampled to 16 kHz mono, trimmed, and cut into 5 s windows. Features per window: MFCC 1-13 (mean/std/delta), pyin pitch, RMS, spectral centroid, ZCR, plus Praat jitter, shimmer, HNR . As a comparison (not used by the app), wav2vec2-base embeddings mean-pooled per window with logistic regression score window AUROC 0.759 (0.617-0.881) and speaker AUROC 0.842 on the same speaker-grouped CV, against 0.716 (0.562-0.877) and 0.774 for the hand-built Random Forest; the intervals overlap heavily, so this is not a clear gain (`results/embeddings_mdvr.csv`; needs `pip install torch transformers`, not in `requirements.txt`). Logistic regression, SVM and Random Forest; `StratifiedGroupKFold` by speaker; scaling and calibration fit inside training folds only. The app scores each 5 s window of a clip and averages, the same way the model was trained.
 
 ## Reproduce
 
@@ -99,7 +99,7 @@ Small cohorts, three languages, different recording gear per dataset, medication
 
 ## Status
 
-Done: scaffold, both leakage demos, first trained model (MDVR-KCL) in the app. Next: Italian and NeuroVoz loaders, leave-one-dataset-out tests, wav2vec2 embeddings, error analysis, public deployment.
+Done: scaffold, both leakage demos, first trained model (MDVR-KCL) in the app. Also done: error analysis and SHAP, calibration before/after, wav2vec2 comparison on MDVR-KCL, Italian loader and recording-confound finding. Next: NeuroVoz loader, run the unseen-dataset test (`experiments/cross_dataset.py`) on a machine with the Italian data, sex and dataset-classifier checks, public deployment.
 
 ## License
 
