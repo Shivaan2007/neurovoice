@@ -1,0 +1,6 @@
+speaker_id,label,windows,mean_p
+mdvr_kcl_16,1,28,0.068
+mdvr_kcl_30,1,20,0.089
+mdvr_kcl_34,1,10,0.175
+mdvr_kcl_14,0,1,0.801
+mdvr_kcl_17,1,1,0.175
