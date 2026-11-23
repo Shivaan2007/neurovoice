@@ -157,6 +157,11 @@ def load_datasets():
                 datasets["italian"] = it
     except Exception as exc:  # no Italian data on this machine
         print(f"Italian data not available here ({type(exc).__name__}); skipping it.")
+    try:
+        from neurovoice.neurovoz import load_windows as load_neurovoz
+        datasets["neurovoz"] = load_neurovoz()
+    except Exception as exc:  # NeuroVoz needs a Data Usage Agreement; usually absent
+        print(f"NeuroVoz not available here ({type(exc).__name__}); skipping it.")
     return datasets
 
 
