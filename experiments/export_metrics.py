@@ -59,6 +59,10 @@ def main():
             "model_auroc_matched": float(rf(it, subset="matched_no_young_16k_only").auroc_window),
             "note": "perfect scores reflect recording differences, not PD detection",
             "source": "results/italian_baseline.csv"},
+        "uci_sex_check": {
+            "table": pd.read_csv(RES / "uci_sex_check.csv").to_dict("records"),
+            "counts": json.loads((RES / "uci_sex_counts.json").read_text()),
+            "source": "results/uci_sex_check.csv"},
         "unseen_dataset": ("see results/cross_dataset.csv" if cross.exists()
                            else "pending: run experiments/cross_dataset.py with Italian data"),
     }
