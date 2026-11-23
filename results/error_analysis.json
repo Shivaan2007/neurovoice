@@ -39,6 +39,10 @@
     "lower_speakers": 0
   },
   "target_precision": 0.8,
+  "bands_crossfit_pooled": {
+    "higher_precision": 0.743,
+    "lower_precision": 0.574
+  },
   "top_shap_features": [
     "f0_mean (0.067)",
     "mfcc3_std (0.038)",

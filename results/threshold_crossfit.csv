@@ -1,6 +1,6 @@
-fold,low,high,n_higher,higher_speakers,higher_precision,n_lower,lower_speakers,lower_precision
-0,0.0,0.63,35,4,0.914,0,0,
-1,0.47,0.69,50,4,1.0,153,8,0.569
-2,0.4,0.57,53,7,0.604,77,7,0.584
-3,0.0,0.58,13,5,0.154,0,0,
-4,0.0,0.59,32,4,0.625,0,0,
+fold,low,high,n_higher,higher_speakers,higher_hits,higher_precision,n_lower,lower_speakers,lower_hits,lower_precision
+0,0.0,0.63,35,4,32,0.914,0,0,0,
+1,0.47,0.69,50,4,50,1.0,153,8,87,0.569
+2,0.4,0.57,53,7,32,0.604,77,7,45,0.584
+3,0.0,0.58,13,5,2,0.154,0,0,0,
+4,0.0,0.59,32,4,20,0.625,0,0,0,

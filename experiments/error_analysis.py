@@ -29,10 +29,10 @@ from neurovoice.evaluate import speaker_bootstrap_ci  # noqa: E402
 from neurovoice.train import (  # noqa: E402
     META_COLS,
     TARGET_PRECISION,
+    crossfit_thresholds,
     load_windows,
     make_models,
     oof_probabilities,
-    pick_thresholds,
     speaker_level,
 )
 
@@ -58,29 +58,6 @@ def boot_ci(y, pred, groups, which, n_boot=1000):
             continue
         vals.append(sens_spec(y[i], pred[i])[which])
     return [round(float(v), 3) for v in np.percentile(vals, [2.5, 97.5])]
-
-
-def crossfit_thresholds(y, p, groups, n_folds=5):
-    """Choose the band cuts on some speakers, measure band precision on the others."""
-    rng = np.random.default_rng(SEED)
-    spk = np.unique(groups)
-    rng.shuffle(spk)
-    folds = np.array_split(spk, n_folds)
-    rows = []
-    for k, held in enumerate(folds):
-        te = np.isin(groups, held)
-        low, high = pick_thresholds(y[~te], p[~te])
-        up, dn = te & (p > high), te & (p < low)
-        rows.append({
-            "fold": k, "low": low, "high": high,
-            "n_higher": int(up.sum()),
-            "higher_speakers": int(len(set(groups[up]))),
-            "higher_precision": round(float((y[up] == 1).mean()), 3) if up.any() else None,
-            "n_lower": int(dn.sum()),
-            "lower_speakers": int(len(set(groups[dn]))),
-            "lower_precision": round(float((y[dn] == 0).mean()), 3) if dn.any() else None,
-        })
-    return pd.DataFrame(rows)
 
 
 def main():
@@ -132,7 +109,7 @@ def main():
         round(float(ce_sum.windows.iloc[0] / max(bad.sum(), 1)), 3) if len(ce_sum) else 0.0)
 
     # Do the app's bands hold when the cuts are chosen on other speakers?
-    cf = crossfit_thresholds(y, p, g)
+    cf, cf_higher, cf_lower = crossfit_thresholds(y, p, g)
     cf.to_csv(RES / "threshold_crossfit.csv", index=False)
     up, dn = p > high, p < low
     out["bands_as_deployed_in_sample"] = {
@@ -141,6 +118,7 @@ def main():
         "higher_windows": int(up.sum()), "higher_speakers": int(len(set(g[up]))),
         "lower_windows": int(dn.sum()), "lower_speakers": int(len(set(g[dn])))}
     out["target_precision"] = TARGET_PRECISION
+    out["bands_crossfit_pooled"] = {"higher_precision": cf_higher, "lower_precision": cf_lower}
 
     # Figure: ROC (window + speaker) and reliability diagram.
     fig, ax = plt.subplots(1, 2, figsize=(10, 4.2))
