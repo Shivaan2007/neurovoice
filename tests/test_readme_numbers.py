@@ -89,3 +89,19 @@ def test_metrics_json_agrees_with_results_files():
     assert m["leakage_demo"]["mdvr_kcl_5s_windows"]["inflation"] == float(r.inflation)
     cv = rf("train_cv.csv")
     assert m["unseen_speakers_mdvr_kcl_random_forest"]["auroc_window"] == float(cv.auroc_window)
+
+
+def test_unseen_dataset_headline_matches_results():
+    d = pd.read_csv(RES / "cross_dataset.csv")
+    r = d[(d.train == "mdvr_kcl") & (d.test == "italian") & (d.test_subset == "no_young")
+          & (d.features == "raw") & (d.model == "random_forest")
+          & (d.setting == "zero_shot")].iloc[0]
+    has(README, f"{r.auroc_window:.3f} ({r.ci95})", f"{r.auroc_speaker:.3f}")
+    has(CARD, f"{r.auroc_window:.3f} (95% CI {r.ci95})", f"{r.auroc_speaker:.3f}")
+    meta = json.loads((ROOT / "models" / "meta.json").read_text())
+    has(meta["cross_dataset_headline"], f"{r.auroc_window:.3f}", r.ci95)
+
+
+def test_dataset_classifier_matches_results():
+    c = pd.read_csv(RES / "dataset_classifier.csv").set_index("model").loc["random_forest"]
+    has(README, f"{c.window_accuracy:.1%}", c.accuracy_ci95, f"{c.chance_majority_class:.1%}")

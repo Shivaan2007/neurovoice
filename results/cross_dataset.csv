@@ -1,0 +1,33 @@
+train,test,test_subset,features,model,setting,auroc_window,ci95,auroc_speaker,brier,ece,target_speakers
+mdvr_kcl,italian,all,raw,random_forest,zero_shot,0.689,0.571-0.796,0.658,0.263,0.204,61
+mdvr_kcl,italian,all,raw,random_forest,adapt_20pct,0.955,sd 0.016 over 5 draws,,0.11,,49
+mdvr_kcl,italian,all,raw,logreg,zero_shot,0.774,0.664-0.864,0.782,0.195,0.064,61
+mdvr_kcl,italian,all,raw,logreg,adapt_20pct,0.913,sd 0.040 over 5 draws,,0.166,,49
+mdvr_kcl,italian,all,per_dataset_z,random_forest,zero_shot,0.736,0.622-0.837,0.69,0.213,0.071,61
+mdvr_kcl,italian,all,per_dataset_z,random_forest,adapt_20pct,0.923,sd 0.014 over 5 draws,,0.131,,49
+mdvr_kcl,italian,all,per_dataset_z,logreg,zero_shot,0.777,0.669-0.865,0.776,0.209,0.131,61
+mdvr_kcl,italian,all,per_dataset_z,logreg,adapt_20pct,0.935,sd 0.023 over 5 draws,,0.174,,49
+mdvr_kcl,italian,no_young,raw,random_forest,zero_shot,0.749,0.622-0.843,0.749,0.216,0.173,46
+mdvr_kcl,italian,no_young,raw,random_forest,adapt_20pct,0.987,sd 0.004 over 5 draws,,0.061,,37
+mdvr_kcl,italian,no_young,raw,logreg,zero_shot,0.811,0.696-0.910,0.823,0.186,0.146,46
+mdvr_kcl,italian,no_young,raw,logreg,adapt_20pct,0.896,sd 0.050 over 5 draws,,0.15,,37
+mdvr_kcl,italian,no_young,per_dataset_z,random_forest,zero_shot,0.824,0.713-0.908,0.813,0.172,0.083,46
+mdvr_kcl,italian,no_young,per_dataset_z,random_forest,adapt_20pct,0.973,sd 0.007 over 5 draws,,0.086,,37
+mdvr_kcl,italian,no_young,per_dataset_z,logreg,zero_shot,0.826,0.716-0.918,0.842,0.219,0.22,46
+mdvr_kcl,italian,no_young,per_dataset_z,logreg,adapt_20pct,0.945,sd 0.013 over 5 draws,,0.158,,37
+mdvr_kcl,italian,no_young_16k_only,raw,random_forest,zero_shot,0.749,0.617-0.860,0.781,0.242,0.203,36
+mdvr_kcl,italian,no_young_16k_only,raw,random_forest,adapt_20pct,0.994,sd 0.003 over 5 draws,,0.065,,29
+mdvr_kcl,italian,no_young_16k_only,raw,logreg,zero_shot,0.818,0.685-0.924,0.851,0.177,0.089,36
+mdvr_kcl,italian,no_young_16k_only,raw,logreg,adapt_20pct,0.925,sd 0.043 over 5 draws,,0.163,,29
+mdvr_kcl,italian,no_young_16k_only,per_dataset_z,random_forest,zero_shot,0.887,0.798-0.957,0.905,0.14,0.064,36
+mdvr_kcl,italian,no_young_16k_only,per_dataset_z,random_forest,adapt_20pct,0.985,sd 0.007 over 5 draws,,0.085,,29
+mdvr_kcl,italian,no_young_16k_only,per_dataset_z,logreg,zero_shot,0.843,0.728-0.936,0.876,0.185,0.162,36
+mdvr_kcl,italian,no_young_16k_only,per_dataset_z,logreg,adapt_20pct,0.939,sd 0.021 over 5 draws,,0.165,,29
+italian,mdvr_kcl,all,raw,random_forest,zero_shot,0.617,0.510-0.728,0.696,0.367,0.33,37
+italian,mdvr_kcl,all,raw,random_forest,adapt_20pct,0.685,sd 0.013 over 5 draws,,0.249,,30
+italian,mdvr_kcl,all,raw,logreg,zero_shot,0.634,0.545-0.727,0.768,0.315,0.261,37
+italian,mdvr_kcl,all,raw,logreg,adapt_20pct,0.645,sd 0.024 over 5 draws,,0.248,,30
+italian,mdvr_kcl,all,per_dataset_z,random_forest,zero_shot,0.623,0.537-0.715,0.741,0.323,0.254,37
+italian,mdvr_kcl,all,per_dataset_z,random_forest,adapt_20pct,0.668,sd 0.019 over 5 draws,,0.258,,30
+italian,mdvr_kcl,all,per_dataset_z,logreg,zero_shot,0.639,0.554-0.731,0.777,0.304,0.247,37
+italian,mdvr_kcl,all,per_dataset_z,logreg,adapt_20pct,0.634,sd 0.010 over 5 draws,,0.266,,30

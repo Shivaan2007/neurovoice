@@ -19,6 +19,18 @@ def rf(df, **where):
     return df[df.model == "random_forest"].iloc[0]
 
 
+def unseen(path):
+    if not path.exists():
+        return "pending: run experiments/cross_dataset.py with Italian data"
+    d = pd.read_csv(path)
+    keep = d[(d.train == "mdvr_kcl") & (d.test == "italian") & (d.features == "raw")
+             & (d.model == "random_forest") & (d.setting == "zero_shot")]
+    return {"train": "mdvr_kcl", "test": "italian", "model": "random_forest",
+            "features": "raw", "setting": "zero_shot",
+            "headline_subset": "no_young", "rows": keep.to_dict("records"),
+            "source": "results/cross_dataset.csv"}
+
+
 def main():
     seg = rf(pd.read_csv(RES / "segment_check.csv"))
     uci = rf(pd.read_csv(RES / "uci_leakage.csv"))
@@ -63,8 +75,9 @@ def main():
             "table": pd.read_csv(RES / "uci_sex_check.csv").to_dict("records"),
             "counts": json.loads((RES / "uci_sex_counts.json").read_text()),
             "source": "results/uci_sex_check.csv"},
-        "unseen_dataset": ("see results/cross_dataset.csv" if cross.exists()
-                           else "pending: run experiments/cross_dataset.py with Italian data"),
+        "unseen_dataset": unseen(cross),
+        "dataset_classifier": (pd.read_csv(RES / "dataset_classifier.csv").to_dict("records")
+                               if (RES / "dataset_classifier.csv").exists() else None),
     }
     (RES / "metrics.json").write_text(json.dumps(metrics, indent=2))
     print(json.dumps(metrics, indent=2)[:1500])

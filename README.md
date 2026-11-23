@@ -27,7 +27,16 @@ Many windows per person leak more than three recordings per person. Every model 
 
 Calibrated (sigmoid, nested inside speaker-grouped CV). The app says "higher" above 0.6, a cut tuned until it was right 80% of the time on the held-out windows it was fit on (about 18.5% of windows, from 23 of 37 speakers). That 80% is in-sample. When the cut is chosen on some speakers and checked on others, "higher" was right about 74% of the time overall, and between 15% and 100% depending on the fold, each fold resting on only 4 to 7 speakers (`results/threshold_crossfit.csv`). Treat "higher" as a weak signal. No cut reached 80% for "lower", so the model never says it; everything else is "not enough confidence". See [docs/model_card.md](docs/model_card.md).
 
-**Unseen dataset (leave-one-dataset-out):** _pending_ (needs the Italian and NeuroVoz loaders).
+**Unseen dataset: trained on MDVR-KCL, tested on Italian read text** ([`results/cross_dataset.csv`](results/cross_dataset.csv))
+
+| Train → test (Random Forest, raw features, zero-shot) | Window AUROC (95% CI) | Speaker-level AUROC |
+|---|---|---|
+| MDVR-KCL → Italian, all speakers | 0.689 (0.571-0.796) | 0.658 |
+| **MDVR-KCL → Italian, no young controls (headline)** | 0.749 (0.622-0.843) | 0.749 |
+| MDVR-KCL → Italian, no young controls, 16 kHz files only | 0.749 (0.617-0.860) | 0.781 |
+| Italian → MDVR-KCL (model trained on the confounded Italian set) | 0.617 (0.510-0.728) | 0.696 |
+
+The headline is the bold row: on a dataset the model never saw, window AUROC is 0.749 (95% CI 0.622-0.843), 0.749 per speaker, on 46 Italian speakers. **Do not read this as evidence the model recognises Parkinson's.** The Italian recordings are confounded (all 44.1 kHz files and the whole 2016 session are PD; every control is 16 kHz from 2017), and a classifier given the same features can tell MDVR-KCL clips from Italian clips with 91.6% accuracy (95% CI 0.868-0.953) against 61.6% for always guessing the larger dataset (`results/dataset_classifier.csv`), so recording differences are visible to the model. Other settings in the same file: standardising each dataset by its own statistics gives 0.824 (0.713-0.908) but needs statistics from the target dataset, which a single clip in the app cannot supply; adding 20% of Italian speakers to training reaches 0.987 AUROC, which mostly reflects how easily the Italian recording confound is learned (within-Italian scores are 1.0), not better generalisation. We could not test NeuroVoz.
 
 ## Why this project
 
@@ -38,7 +47,7 @@ Our Cal Hacks 12.0 (Oct 2025) prototype claimed 87%. The code is lost, so we can
 | Check | How we test | Status |
 |---|---|---|
 | Age | Rerun without Italian young controls (19-29); age-only baseline | done (Italian): age alone scores 0.74 with young controls, 0.56 without |
-| Recording conditions | Classifier predicting which dataset a clip came from | partly done: Italian PD and controls differ in recording; dataset classifier needs two datasets together |
+| Recording conditions | Classifier predicting which dataset a clip came from | done: 91.6% accuracy vs 61.6% chance; Italian PD and controls also differ in recording |
 | Segment leakage | 5 s windows of MDVR-KCL, grouped vs random split | done: 0.972 → 0.738 |
 | Recording leakage | UCI, 3 recordings per subject, grouped vs random split | done: 0.949 → 0.832 |
 | Sex balance | Sex counts per class; subgroup AUROC | done on UCI (sex is not a shortcut there); Italian counts only; no sex data for MDVR-KCL |
@@ -50,7 +59,7 @@ All numbers are collected in `results/metrics.json` (built by `experiments/expor
 
 **Age.** The Italian healthy group mixes 22 elderly (60-77) and 15 young (19-29) controls, while PD speakers are 40-80, so a model could learn "young voice = healthy". Age alone separates the groups with AUROC 0.74 when young controls are included and 0.56 without them, so the headline runs exclude them. The models still score 0.96 to 1.0 either way, which means age is not what drives that score; the recording differences below are.
 
-**Recording conditions.** In the Italian set every control was recorded at 16 kHz in 2017, while all the 44.1 kHz files and the whole 2016 session are PD. Even with young controls removed and only 16 kHz files kept (36 speakers), every model reaches AUROC 1.0 and a single feature (mean of MFCC 8, which mostly reflects microphone and room) separates PD from healthy on its own. Real speech differences do not separate this cleanly, so those scores reflect how the files were made. We use the Italian set only to show the confound and as a test set, never to train the demo model. We have not yet trained a classifier to guess which dataset a clip came from, which needs two datasets loaded together.
+**Recording conditions.** In the Italian set every control was recorded at 16 kHz in 2017, while all the 44.1 kHz files and the whole 2016 session are PD. Even with young controls removed and only 16 kHz files kept (36 speakers), every model reaches AUROC 1.0 and a single feature (mean of MFCC 8, which mostly reflects microphone and room) separates PD from healthy on its own. Real speech differences do not separate this cleanly, so those scores reflect how the files were made. We use the Italian set only to show the confound and as a test set, never to train the demo model. We also trained a classifier to guess which dataset a clip came from, using the same features and speaker-grouped CV: it is right 91.6% of the time (95% CI 0.868-0.953) against 61.6% for always guessing the larger dataset (`results/dataset_classifier.csv`). So the features carry recording information, and part of any cross-dataset drop or gain reflects recording differences, not Parkinson's.
 
 **Segment and recording leakage.** Cutting MDVR-KCL read text into 5 s windows and splitting at random puts the same person in train and test: Random Forest AUROC 0.972 against 0.738 when split by speaker, a gap of 0.23. UCI, with 3 recordings per subject, shows the same direction at a smaller size (0.949 against 0.832). This shows one common way hackathon-style numbers get inflated; we do not claim it is what our original version did.
 
@@ -99,7 +108,7 @@ Small cohorts, one language in the deployed model (three across the datasets we 
 
 ## Status
 
-Done: scaffold, both leakage demos, first trained model (MDVR-KCL) in the app. Also done: error analysis and SHAP, calibration before/after, wav2vec2 comparison on MDVR-KCL, Italian loader and recording-confound finding. Next: NeuroVoz loader, run the unseen-dataset test (`experiments/cross_dataset.py`) on a machine with the Italian data, sex and dataset-classifier checks, public deployment.
+Done: scaffold, both leakage demos, first trained model (MDVR-KCL) in the app. Also done: error analysis and SHAP, calibration before/after, wav2vec2 comparison on MDVR-KCL, Italian loader and recording-confound finding. Also done: the first unseen-dataset test (MDVR-KCL to Italian) and the dataset-classifier check. Next: NeuroVoz loader and tests (needs that data), sex subgroup AUROC on audio (needs sex labels for MDVR-KCL), public deployment.
 
 ## License
 

@@ -130,5 +130,81 @@
     },
     "source": "results/uci_sex_check.csv"
   },
-  "unseen_dataset": "pending: run experiments/cross_dataset.py with Italian data"
+  "unseen_dataset": {
+    "train": "mdvr_kcl",
+    "test": "italian",
+    "model": "random_forest",
+    "features": "raw",
+    "setting": "zero_shot",
+    "headline_subset": "no_young",
+    "rows": [
+      {
+        "train": "mdvr_kcl",
+        "test": "italian",
+        "test_subset": "all",
+        "features": "raw",
+        "model": "random_forest",
+        "setting": "zero_shot",
+        "auroc_window": 0.689,
+        "ci95": "0.571-0.796",
+        "auroc_speaker": 0.658,
+        "brier": 0.263,
+        "ece": 0.204,
+        "target_speakers": 61
+      },
+      {
+        "train": "mdvr_kcl",
+        "test": "italian",
+        "test_subset": "no_young",
+        "features": "raw",
+        "model": "random_forest",
+        "setting": "zero_shot",
+        "auroc_window": 0.749,
+        "ci95": "0.622-0.843",
+        "auroc_speaker": 0.749,
+        "brier": 0.216,
+        "ece": 0.173,
+        "target_speakers": 46
+      },
+      {
+        "train": "mdvr_kcl",
+        "test": "italian",
+        "test_subset": "no_young_16k_only",
+        "features": "raw",
+        "model": "random_forest",
+        "setting": "zero_shot",
+        "auroc_window": 0.749,
+        "ci95": "0.617-0.860",
+        "auroc_speaker": 0.781,
+        "brier": 0.242,
+        "ece": 0.203,
+        "target_speakers": 36
+      }
+    ],
+    "source": "results/cross_dataset.csv"
+  },
+  "dataset_classifier": [
+    {
+      "model": "logreg",
+      "window_accuracy": 0.893,
+      "accuracy_ci95": "0.850-0.930",
+      "balanced_accuracy": 0.884,
+      "balanced_ci95": "0.836-0.926",
+      "speaker_accuracy": 0.918,
+      "chance_majority_class": 0.616,
+      "windows": 2606,
+      "speakers": 98
+    },
+    {
+      "model": "random_forest",
+      "window_accuracy": 0.916,
+      "accuracy_ci95": "0.868-0.953",
+      "balanced_accuracy": 0.905,
+      "balanced_ci95": "0.857-0.946",
+      "speaker_accuracy": 0.929,
+      "chance_majority_class": 0.616,
+      "windows": 2606,
+      "speakers": 98
+    }
+  ]
 }
