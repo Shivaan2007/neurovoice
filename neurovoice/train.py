@@ -155,6 +155,24 @@ def crossfit_thresholds(y, p, groups, n_folds=5):
     return table, pooled["higher"], pooled["lower"]
 
 
+def cross_dataset_headline(model_name, path=ROOT / "results" / "cross_dataset.csv"):
+    """One-line unseen-dataset result for meta.json, read from results (never typed by hand)."""
+    if not path.exists():
+        return ("pending: no unseen-dataset result yet "
+                "(experiments/cross_dataset.py needs the Italian data)")
+    d = pd.read_csv(path)
+    d = d[(d.train == "mdvr_kcl") & (d.test == "italian") & (d.test_subset == "no_young")
+          & (d.features == "raw") & (d.model == model_name) & (d.setting == "zero_shot")]
+    if d.empty:
+        return "pending: no unseen-dataset result for this model"
+    r = d.iloc[0]
+    return (f"MDVR-KCL to Italian read text without young controls, {model_name}, raw features: "
+            f"window AUROC {r.auroc_window:.3f} (95% CI {r.ci95}), speaker-level "
+            f"{r.auroc_speaker:.3f}, {int(r.target_speakers)} speakers. The Italian recordings are "
+            "confounded (see docs/data_card.md), so this is not evidence the model recognises "
+            "Parkinson's.")
+
+
 def evaluate_models(X, y, groups, names=None):
     rows, oof = [], {}
     for name in names or make_models():
@@ -194,8 +212,7 @@ def train(df, model_path=MODEL_PATH, meta_path=META_PATH, results_path=None, nam
         "model": best.model,
         "trained_on": "MDVR-KCL read text (English, smartphone), 5 s windows",
         "training_datasets": ["mdvr_kcl"],
-        "cross_dataset_headline": "pending: no unseen-dataset result yet "
-                                  "(experiments/cross_dataset.py needs the Italian data)",
+        "cross_dataset_headline": cross_dataset_headline(best.model),
         "limits": NOTICE,
         "n_speakers": int(len(set(groups))),
         "n_windows": int(len(y)),

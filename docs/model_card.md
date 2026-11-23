@@ -37,6 +37,8 @@ Speaker-grouped 5-fold CV; calibration is fit on inner grouped folds of each tra
 
 The model was picked as the best of logistic regression, SVM and Random Forest on the same CV, so these numbers are slightly optimistic.
 
+**Unseen dataset.** Tested on Italian read text without young controls (never seen in training, 46 speakers): window AUROC 0.749 (95% CI 0.622-0.843), speaker-level 0.749 (`results/cross_dataset.csv`). This number does not show the model recognises Parkinson's: the Italian recordings are confounded with the PD label, and the same features tell the two datasets apart most of the time (`results/dataset_classifier.csv`). See the README for the full table.
+
 ## How the confidence band was chosen
 
 From held-out window probabilities:

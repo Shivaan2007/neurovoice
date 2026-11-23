@@ -5,7 +5,7 @@
   "training_datasets": [
     "mdvr_kcl"
   ],
-  "cross_dataset_headline": "pending: no unseen-dataset result yet (experiments/cross_dataset.py needs the Italian data)",
+  "cross_dataset_headline": "MDVR-KCL to Italian read text without young controls, random_forest, raw features: window AUROC 0.749 (95% CI 0.622-0.843), speaker-level 0.749, 46 speakers. The Italian recordings are confounded (see docs/data_card.md), so this is not evidence the model recognises Parkinson's.",
   "limits": "NeuroVoice is a screening-support research prototype. It is not a diagnosis. The model was trained on English speech from 37 people in one dataset, has not been tested on other languages, microphones or rooms, and has no clinical validation. Please talk to a doctor about any concerns.",
   "n_speakers": 37,
   "n_windows": 1001,

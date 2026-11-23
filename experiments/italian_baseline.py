@@ -45,6 +45,8 @@ def load_windows():
 
     res = Parallel(n_jobs=-1)(delayed(one)(r) for _, r in m.iterrows())
     df = pd.DataFrame([w for r in res for w in r])
+    if df.empty:  # never cache an empty result: it would hide the real problem next run
+        raise FileNotFoundError("no Italian read-text windows found; is data/raw/italian filled?")
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     df.to_csv(CACHE, index=False)
     return df
