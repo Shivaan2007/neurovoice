@@ -40,7 +40,18 @@ The headline is the bold row: on a dataset the model never saw, window AUROC is 
 
 ## Why this project
 
-Our Cal Hacks 12.0 (Oct 2025) prototype claimed 87%. The code is lost, so we cannot say exactly how that was measured. This rebuild focuses on honest evaluation: speaker-level splits, unseen-dataset tests, confound checks, calibrated probabilities and stated limits.
+This rebuild of our unfinished Cal Hacks prototype focuses on honest evaluation: speaker-level splits, unseen-dataset tests, confound checks, calibrated probabilities and stated limits.
+
+## What we got wrong at Cal Hacks
+
+Our Cal Hacks 12.0 (Oct 2025) prototype claimed 87%. The code is lost, so we cannot say how that figure was measured, and we do not claim it came from a random split. What we can show, on the same kind of data, is how easily a flattering number appears and how far it falls under honest testing:
+
+- **Random split, same people in train and test:** AUROC 0.972 on 5 s windows of MDVR-KCL read text. A model can score well here just by recognising each speaker.
+- **Split by speaker (the honest version):** 0.738 (95% CI 0.585-0.879), a drop of 0.23.
+- **Speaker-level, unseen speakers:** 0.777 (95% CI 0.587-0.948) across 37 speakers, a very wide interval.
+- **A dataset the model never saw:** 0.749 (95% CI 0.622-0.843) on Italian read text, but that dataset is recording-confounded, so we do not read it as a real gain (see above).
+
+So the honest picture is an AUROC of roughly 0.7 to 0.78 with intervals that run from about 0.55 to 0.95, not a number near 90%. These are AUROCs, not necessarily the metric behind the old 87%, so this is not a like-for-like comparison, and we do not make one.
 
 ## What could fool us (validation checks)
 
@@ -86,10 +97,13 @@ Audio is resampled to 16 kHz mono, trimmed, and cut into 5 s windows. Features p
 
 ```bash
 make install
-make reproduce   # manifest -> MDVR-KCL segment check -> UCI leakage -> train
+make reproduce          # MDVR-KCL + UCI: manifest, train, leakage demos, sex check, error analysis, severity
+make reproduce-italian  # needs the Italian data: its baseline, unseen-dataset test, dataset classifier
+make metrics            # collects every number into results/metrics.json
+make reproduce-all      # all three
 ```
 
-Needs the datasets in `data/raw/` first; see [docs/data_card.md](docs/data_card.md).
+Put each dataset in `data/raw/<name>/` first (`mdvr_kcl`, `uci`, `italian`, and `neurovoz` if you have access); see [docs/data_card.md](docs/data_card.md) for where to download them. Nothing in `data/` is ever committed. Optional extras: `python -m experiments.embeddings_mdvr` (needs `pip install torch transformers`) and `pytest -q` for the tests, which also check that every number in this README matches `results/`.
 
 ## Run the app
 

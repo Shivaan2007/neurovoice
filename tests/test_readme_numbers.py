@@ -116,3 +116,17 @@ def test_severity_numbers_match_results():
         has(README, f"{row.mean_probability:.3f} at stage {int(stage)}")
     has(README, f"{hc.mean_probability:.3f} for the")
     has(CARD, f"{pd_rows.iloc[0].mean_probability:.3f} at Hoehn & Yahr stage 2")
+
+
+def test_cal_hacks_section_numbers_match_results():
+    section = README.split("## What we got wrong at Cal Hacks")[1].split("\n## ")[0]
+    seg = rf("segment_check.csv")
+    cv = rf("train_cv.csv")
+    d = pd.read_csv(RES / "cross_dataset.csv")
+    h = d[(d.train == "mdvr_kcl") & (d.test == "italian") & (d.test_subset == "no_young")
+          & (d.features == "raw") & (d.model == "random_forest")
+          & (d.setting == "zero_shot")].iloc[0]
+    has(section, f"{seg.auroc_naive_random:.3f}", f"{seg.auroc_speaker_grouped:.3f}",
+        seg.grouped_ci95, f"{seg.inflation:.2f}", f"{cv.auroc_speaker:.3f} (95% CI {cv.speaker_ci95})",
+        f"{h.auroc_window:.3f} (95% CI {h.ci95})")
+    assert "87%" in section

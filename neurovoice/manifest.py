@@ -53,8 +53,9 @@ def check_one_label_per_speaker(df):
 
 def build_manifest():
     from neurovoice.italian import parse_italian
+    from neurovoice.neurovoz import parse_neurovoz
 
-    rows = parse_mdvr_kcl() + parse_italian()  # each parser skips a dataset not downloaded
+    rows = parse_mdvr_kcl() + parse_italian() + parse_neurovoz()  # each skips a missing dataset
     df = pd.DataFrame(rows, columns=MANIFEST_COLUMNS)
     dup = df.sha1.duplicated()
     if dup.any():  # e.g. one Italian speaker's B1 and B2 are the same audio file
