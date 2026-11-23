@@ -1,0 +1,56 @@
+{
+  "auroc_window": [
+    0.716,
+    0.562,
+    0.877
+  ],
+  "auroc_speaker": 0.777,
+  "n_speakers": 37,
+  "n_windows": 1001,
+  "window_at_0.5": {
+    "sensitivity": 0.533,
+    "sens_ci95": [
+      0.369,
+      0.72
+    ],
+    "specificity": 0.82,
+    "spec_ci95": [
+      0.726,
+      0.905
+    ]
+  },
+  "speaker_at_0.5": {
+    "sensitivity": 0.562,
+    "specificity": 1.0,
+    "n_pd": 16,
+    "n_healthy": 21
+  },
+  "speakers_wrong": 7,
+  "confident_wrong_windows": 60,
+  "confident_wrong_speakers": 5,
+  "top_speaker_share_of_confident_errors": 0.467,
+  "bands_as_deployed_in_sample": {
+    "low": 0.0,
+    "high": 0.6,
+    "higher_precision": 0.8,
+    "higher_windows": 185,
+    "higher_speakers": 23,
+    "lower_windows": 0,
+    "lower_speakers": 0
+  },
+  "target_precision": 0.8,
+  "bands_crossfit_pooled": {
+    "higher_precision": 0.743,
+    "lower_precision": 0.574
+  },
+  "top_shap_features": [
+    "f0_mean (0.067)",
+    "mfcc3_std (0.038)",
+    "rms_mean (0.033)",
+    "mfcc13_mean (0.030)",
+    "mfcc5_mean (0.026)",
+    "mfcc6_mean (0.026)",
+    "zcr_mean (0.025)",
+    "spectral_centroid_mean (0.024)"
+  ]
+}

@@ -70,5 +70,18 @@
   },
   "selection_note": "Best of 3 models on the same CV, so its score is slightly optimistic; all three are in results/train_cv.csv.",
   "trained": "2026-11-22",
-  "sklearn": "1.9.1"
+  "sklearn": "1.9.1",
+  "band_precision": {
+    "higher_in_sample": 0.8,
+    "higher_crossfit": 0.743,
+    "lower_crossfit": 0.574,
+    "crossfit_higher_per_fold": [
+      0.914,
+      1.0,
+      0.604,
+      0.154,
+      0.625
+    ],
+    "note": "in_sample is what the cut was tuned on and is optimistic; crossfit picks the cut on other speakers and is the number to quote."
+  }
 }

@@ -7,7 +7,7 @@ import pandas as pd
 from neurovoice.config import SAMPLE_RATE
 from neurovoice.features import features_from_signal
 from neurovoice.predict import band_for, predict
-from neurovoice.train import pick_thresholds, speaker_level, train
+from neurovoice.train import crossfit_thresholds, pick_thresholds, speaker_level, train
 
 
 def test_thresholds_on_well_separated_probabilities():
@@ -65,3 +65,24 @@ def test_train_saves_model_that_predict_uses(tmp_path):
     assert 0.0 <= out["probability"] <= 1.0
     assert out["band"] in {"lower", "uncertain", "higher"}
     assert out["model_version"] == "mdvr-kcl-logreg-v1"
+
+
+def test_band_needs_several_speakers():
+    # 20 confident, correct windows, but all from one person: the band must stay closed.
+    y = np.array([1] * 20 + [0] * 20)
+    p = np.array([0.9] * 20 + [0.1] * 20)
+    groups = np.array(["a"] * 20 + ["b"] * 20)
+    assert pick_thresholds(y, p, groups=groups) == (0.0, 1.0)
+    many = np.array([f"s{i % 10}" for i in range(20)] + [f"h{i % 10}" for i in range(20)])
+    low, high = pick_thresholds(y, p, groups=many)
+    assert low > 0.1 and high < 0.9
+
+
+def test_crossfit_precision_reports_unseen_speaker_performance():
+    rng = np.random.default_rng(0)
+    n_spk, per = 30, 10
+    groups = np.repeat(np.arange(n_spk), per)
+    y = np.repeat(np.arange(n_spk) % 2, per)
+    p = np.clip(0.5 + (y - 0.5) * 0.9 + rng.normal(0, 0.1, len(y)), 0.01, 0.99)
+    table, higher, lower = crossfit_thresholds(y, p, groups)
+    assert len(table) == 5 and higher > 0.9 and lower > 0.9

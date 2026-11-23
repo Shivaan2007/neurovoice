@@ -33,8 +33,9 @@ from neurovoice.splits import grouped_splits
 warnings.filterwarnings("ignore")
 META_COLS = ["speaker_id", "label", "window"]
 WINDOW_CACHE = CACHE_DIR / "mdvr_read_text_5s_windows.csv"  # shared with the segment check
-TARGET_PRECISION = 0.8  # a band must be right at least 80% of the time on held-out windows
+TARGET_PRECISION = 0.8  # the cut is TUNED to reach this on the held-out windows it is fit on
 MIN_IN_BAND = 10
+MIN_SPEAKERS_IN_BAND = 5  # windows from one person are correlated, so count people too
 
 
 def make_models():
@@ -89,21 +90,61 @@ def speaker_level(y, p, groups):
     return df.y.to_numpy(), df.p.to_numpy()
 
 
-def pick_thresholds(y, p, target=TARGET_PRECISION, min_n=MIN_IN_BAND):
+def pick_thresholds(y, p, target=TARGET_PRECISION, min_n=MIN_IN_BAND, groups=None,
+                    min_speakers=MIN_SPEAKERS_IN_BAND):
     """low: largest cut where windows below it are healthy >= target of the time.
     high: smallest cut where windows above it are PD >= target of the time.
     If no cut reaches the target, that side stays closed (0 or 1), so the app says
     "not enough confidence" rather than guess.
+
+    The precision reached here is IN-SAMPLE for the data the cut is fit on. Use
+    crossfit_thresholds for an honest estimate. With `groups`, a band must also hold
+    windows from at least `min_speakers` different people.
     """
     y, p = np.asarray(y), np.asarray(p)
+    g = None if groups is None else np.asarray(groups)
+
+    def enough(mask):
+        return mask.sum() >= min_n and (g is None or len(set(g[mask])) >= min_speakers)
+
     grid = np.round(np.arange(0.05, 0.96, 0.01), 2)
-    low = max((t for t in grid if (p < t).sum() >= min_n and (y[p < t] == 0).mean() >= target),
+    low = max((t for t in grid if enough(p < t) and (y[p < t] == 0).mean() >= target),
               default=0.0)
-    high = min((t for t in grid if (p > t).sum() >= min_n and (y[p > t] == 1).mean() >= target),
+    high = min((t for t in grid if enough(p > t) and (y[p > t] == 1).mean() >= target),
                default=1.0)
     if low > high:  # bands would overlap; collapse to a single cut
         low = high = round((low + high) / 2, 2)
     return float(low), float(high)
+
+
+def crossfit_thresholds(y, p, groups, n_folds=5):
+    """Pick the band cuts on some speakers and measure band precision on the others.
+
+    Returns (per-fold table, pooled precision for "higher", pooled precision for "lower").
+    """
+    y, p, groups = np.asarray(y), np.asarray(p), np.asarray(groups)
+    rng = np.random.default_rng(SEED)
+    spk = np.unique(groups)
+    rng.shuffle(spk)
+    rows = []
+    for k, held in enumerate(np.array_split(spk, n_folds)):
+        te = np.isin(groups, held)
+        low, high = pick_thresholds(y[~te], p[~te], groups=groups[~te])
+        up, dn = te & (p > high), te & (p < low)
+        rows.append({
+            "fold": k, "low": low, "high": high,
+            "n_higher": int(up.sum()), "higher_speakers": int(len(set(groups[up]))),
+            "higher_hits": int((y[up] == 1).sum()),
+            "higher_precision": round(float((y[up] == 1).mean()), 3) if up.any() else None,
+            "n_lower": int(dn.sum()), "lower_speakers": int(len(set(groups[dn]))),
+            "lower_hits": int((y[dn] == 0).sum()),
+            "lower_precision": round(float((y[dn] == 0).mean()), 3) if dn.any() else None,
+        })
+    table = pd.DataFrame(rows)
+    pooled = {side: (round(float(table[f"{side}_hits"].sum() / table[f"n_{side}"].sum()), 3)
+                     if table[f"n_{side}"].sum() else None)
+              for side in ("higher", "lower")}
+    return table, pooled["higher"], pooled["lower"]
 
 
 def evaluate_models(X, y, groups, names=None):
@@ -128,7 +169,9 @@ def train(df, model_path=MODEL_PATH, meta_path=META_PATH, results_path=None, nam
 
     results, oof = evaluate_models(X, y, groups, names)
     best = results.sort_values("auroc_speaker", ascending=False).iloc[0]
-    low, high = pick_thresholds(y, oof[best.model])
+    low, high = pick_thresholds(y, oof[best.model], groups=groups)
+    cf_table, cf_higher, cf_lower = crossfit_thresholds(y, oof[best.model], groups)
+    in_sample = oof[best.model] > high
     bands = pd.Series(np.where(oof[best.model] < low, "lower",
                                np.where(oof[best.model] > high, "higher", "uncertain")))
 
@@ -147,6 +190,15 @@ def train(df, model_path=MODEL_PATH, meta_path=META_PATH, results_path=None, nam
         "low": low,
         "high": high,
         "held_out_band_share": bands.value_counts(normalize=True).round(3).to_dict(),
+        "band_precision": {
+            "higher_in_sample": (round(float((y[in_sample] == 1).mean()), 3)
+                                 if in_sample.any() else None),
+            "higher_crossfit": cf_higher,
+            "lower_crossfit": cf_lower,
+            "crossfit_higher_per_fold": cf_table["higher_precision"].tolist(),
+            "note": "in_sample is what the cut was tuned on and is optimistic; crossfit "
+                    "picks the cut on other speakers and is the number to quote.",
+        },
         "cv": best.drop("model").to_dict(),
         "selection_note": "Best of 3 models on the same CV, so its score is slightly "
                           "optimistic; all three are in results/train_cv.csv.",
