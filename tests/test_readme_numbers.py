@@ -39,10 +39,11 @@ def test_uci_leakage_row_matches_results():
 def test_demo_model_table_matches_train_cv():
     df = pd.read_csv(RES / "train_cv.csv")
     for _, r in df.iterrows():
-        has(README, f"{r.auroc_window:.3f} ({r.window_ci95})", f"{r.auroc_speaker:.3f}",
-            f"{r.brier:.3f}")
+        has(README, f"{r.auroc_window:.3f} ({r.window_ci95})",
+            f"{r.auroc_speaker:.3f} ({r.speaker_ci95})", f"{r.brier:.3f}")
     r = df[df.model == "random_forest"].iloc[0]
-    has(CARD, f"{r.auroc_window:.3f} ({r.window_ci95})", f"{r.auroc_speaker:.3f}",
+    has(CARD, f"{r.auroc_window:.3f} ({r.window_ci95})",
+        f"{r.auroc_speaker:.3f} ({r.speaker_ci95})",
         f"{r.brier:.3f}", f"{r.ece:.3f}")
 
 
@@ -78,7 +79,8 @@ def test_sex_check_matches_results():
 
 def test_wav2vec2_numbers_match_results():
     r = pd.read_csv(RES / "embeddings_mdvr.csv").set_index("model").loc["logreg"]
-    has(README, f"{r.auroc_window:.3f} ({r.window_ci95})", f"{r.auroc_speaker:.3f}")
+    has(README, f"{r.auroc_window:.3f} ({r.window_ci95})",
+        f"{r.auroc_speaker:.3f} ({r.speaker_ci95})")
 
 
 def test_metrics_json_agrees_with_results_files():

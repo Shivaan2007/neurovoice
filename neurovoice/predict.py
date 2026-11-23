@@ -21,7 +21,7 @@ def predict(path: str, model_path=None, meta_path=None) -> dict:
     model_path, meta_path = model_path or MODEL_PATH, meta_path or META_PATH
     if not (model_path.exists() and meta_path.exists()):
         return {"probability": 0.5, "band": "uncertain",
-                "model_version": STUB_VERSION, "notice": NOTICE}
+                "model_version": STUB_VERSION, "stub": True, "notice": NOTICE}
     import joblib
 
     from neurovoice.features import features_from_signal, load_audio, window_features
@@ -33,4 +33,4 @@ def predict(path: str, model_path=None, meta_path=None) -> dict:
     x = np.array([[f[k] for k in meta["feature_names"]] for f in feats])
     p = float(model.predict_proba(x)[:, 1].mean())
     return {"probability": p, "band": band_for(p, meta["low"], meta["high"]),
-            "model_version": meta["model_version"], "notice": NOTICE}
+            "model_version": meta["model_version"], "stub": False, "notice": NOTICE}

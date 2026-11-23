@@ -22,6 +22,7 @@ MANIFEST_COLUMNS = [
 
 NOTICE = (
     "NeuroVoice is a screening-support research prototype. It is not a "
-    "diagnosis. It was trained on small cohorts in three languages and has "
-    "no clinical validation. Please talk to a doctor about any concerns."
+    "diagnosis. The model was trained on English speech from 37 people in one "
+    "dataset, has not been tested on other languages, microphones or rooms, and "
+    "has no clinical validation. Please talk to a doctor about any concerns."
 )

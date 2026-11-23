@@ -31,9 +31,9 @@ Speaker-grouped 5-fold CV; calibration is fit on inner grouped folds of each tra
 | Metric (held-out speakers) | Value |
 |---|---|
 | Window AUROC (95% CI, bootstrapped over speakers) | 0.716 (0.562-0.877) |
-| Speaker-level AUROC (mean probability per speaker) | 0.774 |
+| Speaker-level AUROC (mean probability per speaker, 95% CI) | 0.777 (0.587-0.948) |
 | Brier score | 0.204 |
-| Expected calibration error | 0.104 |
+| Expected calibration error | 0.105 |
 
 The model was picked as the best of logistic regression, SVM and Random Forest on the same CV, so these numbers are slightly optimistic.
 

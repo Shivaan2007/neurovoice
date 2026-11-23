@@ -25,7 +25,15 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from neurovoice.config import CACHE_DIR, MANIFEST_PATH, META_PATH, MODEL_PATH, ROOT, SEED
+from neurovoice.config import (
+    CACHE_DIR,
+    MANIFEST_PATH,
+    META_PATH,
+    MODEL_PATH,
+    NOTICE,
+    ROOT,
+    SEED,
+)
 from neurovoice.evaluate import calibration_report, speaker_bootstrap_ci
 from neurovoice.features import WINDOW_SECONDS, load_audio, window_features
 from neurovoice.splits import grouped_splits
@@ -154,10 +162,12 @@ def evaluate_models(X, y, groups, names=None):
         oof[name] = p
         point, lo, hi = speaker_bootstrap_ci(y, p, groups)
         sy, sp = speaker_level(y, p, groups)
+        _, slo, shi = speaker_bootstrap_ci(sy, sp, np.arange(len(sy)))  # one row per speaker
         rows.append({"model": name,
                      "auroc_window": round(point, 3),
                      "window_ci95": f"{lo:.3f}-{hi:.3f}",
                      "auroc_speaker": round(roc_auc_score(sy, sp), 3),
+                     "speaker_ci95": f"{slo:.3f}-{shi:.3f}",
                      **{k: round(v, 3) for k, v in calibration_report(y, p).items()}})
     return pd.DataFrame(rows), oof
 
@@ -183,6 +193,10 @@ def train(df, model_path=MODEL_PATH, meta_path=META_PATH, results_path=None, nam
         "model_version": f"mdvr-kcl-{best.model}-v1",
         "model": best.model,
         "trained_on": "MDVR-KCL read text (English, smartphone), 5 s windows",
+        "training_datasets": ["mdvr_kcl"],
+        "cross_dataset_headline": "pending: no unseen-dataset result yet "
+                                  "(experiments/cross_dataset.py needs the Italian data)",
+        "limits": NOTICE,
         "n_speakers": int(len(set(groups))),
         "n_windows": int(len(y)),
         "window_seconds": WINDOW_SECONDS,

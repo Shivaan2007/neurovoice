@@ -40,6 +40,6 @@ Datasets are **never committed**. Download them yourself.
 - All 44.1 kHz files and the whole 2016 session are PD; every control is 16 kHz from 2017.
 - Even on matched recordings (no young controls, 16 kHz only, 36 speakers), every model scores AUROC 1.0, and a single feature (mean of MFCC 8, mostly microphone and room) separates PD from healthy perfectly on its own.
 - Real PD speech differences do not separate this cleanly with hand-built features, so PD and control recordings differ in how they were made.
-- **Use:** a recording-confound example and a cross-dataset test set only. Do not report its within-dataset scores as PD detection, and do not train the demo model on it.
+- **Use:** a recording-confound example and a cross-dataset test set only. Do not report its within-dataset scores as evidence that the model recognises Parkinson's, and do not train the demo model on it.
 
 Counts for NeuroVoz: to be filled when its loader lands.
