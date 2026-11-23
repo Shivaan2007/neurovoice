@@ -17,8 +17,8 @@ MAX_UPLOAD_BYTES = 20_000_000  # 20 MB is far more than 30 s of audio needs
 
 MANIFEST_COLUMNS = [
     "file", "speaker_id", "label", "dataset", "language", "task",
-    "sample_rate", "duration_s", "age", "gender", "sha1",
-]  # label: 1 = PD, 0 = healthy
+    "sample_rate", "duration_s", "age", "gender", "sha1", "cohort",
+]  # label: 1 = PD, 0 = healthy; cohort: e.g. young_hc / elderly_hc / pd (Italian only)
 
 NOTICE = (
     "NeuroVoice is a screening-support research prototype. It is not a "

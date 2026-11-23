@@ -1,4 +1,4 @@
-"""Build data/manifest.csv. One small parser per dataset (MDVR-KCL implemented)."""
+"""Build data/manifest.csv. One small parser per dataset (MDVR-KCL here, Italian in italian.py)."""
 import hashlib
 import re
 import wave
@@ -52,8 +52,16 @@ def check_one_label_per_speaker(df):
 
 
 def build_manifest():
-    rows = parse_mdvr_kcl()
+    from neurovoice.italian import parse_italian
+
+    rows = parse_mdvr_kcl() + parse_italian()  # each parser skips a dataset not downloaded
     df = pd.DataFrame(rows, columns=MANIFEST_COLUMNS)
+    dup = df.sha1.duplicated()
+    if dup.any():  # e.g. one Italian speaker's B1 and B2 are the same audio file
+        # print speaker IDs, not paths: Italian paths contain participants' names
+        print(f"dropping {int(dup.sum())} duplicate audio file(s) from:",
+              sorted(set(df.speaker_id[dup])))
+        df = df[~dup].reset_index(drop=True)
     check_one_label_per_speaker(df)
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(MANIFEST_PATH, index=False)
