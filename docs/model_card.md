@@ -53,6 +53,7 @@ In plain terms: when this model is unsure, it says so, and it currently cannot r
 
 ## Known limits
 
+- **Milder PD scores close to healthy:** on held-out speakers the average probability is 0.366 at Hoehn & Yahr stage 2 against 0.329 for healthy controls (`results/severity_check.csv`); the groups are tiny.
 - **Tiny cohort:** 37 speakers, one dataset, one language, one recording setup. The wide CI reflects this.
 - **No test on other datasets yet:** performance on other languages, microphones or rooms is unknown and expected to be lower.
 - **Not controlled:** age, sex and medication state.

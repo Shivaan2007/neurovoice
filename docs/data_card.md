@@ -6,7 +6,7 @@ Datasets are **never committed**. Download them yourself.
 |---|---|---|---|---|
 | MDVR-KCL | English | Read text (smartphone); spontaneous dialogue also present, unused | [Zenodo 2867216](https://zenodo.org/records/2867216): `26_29_09_2017_KCL.zip` (606 MB), unzip into `data/raw/mdvr_kcl/` | CC BY 4.0 (per Zenodo); trained weights may be shared |
 | Italian Parkinson's Voice and Speech | Italian | Read text (B1/B2); vowels, syllables, phrases also parsed | [IEEE DataPort](https://ieee-dataport.org/open-access/italian-parkinsons-voice-and-speech) (free login, DOI 10.21227/aw6b-tg17): zip (593 MB), unzip into `data/raw/italian/` | Creative Commons Attribution (per the IEEE DataPort page, checked 2026-11-23; version not stated). **Recording confound, see below** |
-| NeuroVoz | Spanish | Repeated sentences (listen-and-repeat) | NeuroVoz corpus | CC BY-NC-ND: evaluation only, no trained weights shared until confirmed |
+| NeuroVoz | Castilian Spanish | Repeated sentences (listen-and-repeat) | [Zenodo 10777656](https://doi.org/10.5281/zenodo.10777656), access by request under a Data Usage Agreement | Not yet obtained. Our plan notes CC BY-NC-ND; read the record's license and the DUA once access is granted. Evaluation only, no trained weights shared until confirmed |
 | UCI Parkinson's Disease Classification | Turkish speakers, sustained /a/ | Tabular features (leakage demo): 756 recordings, 252 subjects (188 PD, 64 healthy), 3 per subject, 753 feature columns (incl. gender) besides `id` and `class`. The download is a zip holding a `.rar`; Windows `tar -xf` extracts it | [UCI #470](https://archive.ics.uci.edu/dataset/470); unzip `pd_speech_features.csv` into `data/raw/uci/` | CC BY 4.0 (per the UCI page, checked 2026-11-23) |
 
 ## MDVR-KCL (from `data/manifest.csv`, built 2026-11-22)
@@ -20,7 +20,9 @@ Datasets are **never committed**. Download them yourself.
 
 - All files are 44.1 kHz WAV; resampled to 16 kHz for features.
 - No duplicate files (SHA-1 check); every speaker ID has one label.
-- Age and sex are not in the file names or release, so they are blank in the manifest.
+- Age and sex are not in the file names or release, so they are blank in the manifest. The Zenodo record lists a single file (`26_29_09_2017_KCL.zip`) and no separate metadata sheet (checked 2026-11-23).
+- Facts from the Zenodo description (record 2867216, CC BY 4.0, checked 2026-11-23): recorded at King's College London Hospital, 26-29 September 2017, in a roughly 10 m² examination room, on a Motorola Moto G4 phone held to the ear (44.1 kHz, 16 bit), by participants reading "The North Wind and the Sun" (some also a second passage), then a spontaneous dialogue.
+- File names carry clinician ratings: `IDnn_<hc|pd>_<Hoehn & Yahr>_<UPDRS II-5>_<UPDRS III-18>`. These are the only subgroup labels we have for the audio; see `results/severity_check.csv`. One healthy control (ID31) has a non-zero rating and some PD speakers are rated 0, which the authors say means a rater could not hear voice change, not that labels are ambiguous.
 
 ## Italian Parkinson's Voice and Speech (from `data/manifest.csv`, built 2026-11-22)
 
@@ -42,4 +44,6 @@ Datasets are **never committed**. Download them yourself.
 - Real PD speech differences do not separate this cleanly with hand-built features, so PD and control recordings differ in how they were made.
 - **Use:** a recording-confound example and a cross-dataset test set only. Do not report its within-dataset scores as evidence that the model recognises Parkinson's, and do not train the demo model on it.
 
-Counts for NeuroVoz: to be filled when its loader lands.
+## NeuroVoz (not obtained yet)
+
+From the corpus paper (Mendes-Laureano et al., Scientific Data 2024, [arXiv 2403.02371](https://arxiv.org/abs/2403.02371), checked 2026-11-23): 112 native Castilian-Spanish speakers (58 healthy, 54 PD), all patients recorded in the ON medication state; tasks are sustained vowels, diadochokinetic tests, 16 listen-and-repeat utterances and spontaneous monologues. Access is restricted: applicants copy the Data Usage Agreement from the Zenodo record into the request message box with their personal details, and requests that agree to the terms are considered (paper, Usage Notes). Counts from our own manifest will be added when the data and its loader are in.
