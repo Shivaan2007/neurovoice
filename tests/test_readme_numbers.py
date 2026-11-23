@@ -105,3 +105,14 @@ def test_unseen_dataset_headline_matches_results():
 def test_dataset_classifier_matches_results():
     c = pd.read_csv(RES / "dataset_classifier.csv").set_index("model").loc["random_forest"]
     has(README, f"{c.window_accuracy:.1%}", c.accuracy_ci95, f"{c.chance_majority_class:.1%}")
+
+
+def test_severity_numbers_match_results():
+    sev = pd.read_csv(RES / "severity_check.csv")
+    pd_rows = sev[sev.group.str.startswith("PD")].set_index("hy_stage")
+    hc = sev[sev.group == "healthy controls"].iloc[0]
+    for stage in pd_rows.index:
+        row = pd_rows.loc[stage]
+        has(README, f"{row.mean_probability:.3f} at stage {int(stage)}")
+    has(README, f"{hc.mean_probability:.3f} for the")
+    has(CARD, f"{pd_rows.iloc[0].mean_probability:.3f} at Hoehn & Yahr stage 2")

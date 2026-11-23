@@ -52,6 +52,7 @@ Our Cal Hacks 12.0 (Oct 2025) prototype claimed 87%. The code is lost, so we can
 | Recording leakage | UCI, 3 recordings per subject, grouped vs random split | done: 0.949 → 0.832 |
 | Sex balance | Sex counts per class; subgroup AUROC | done on UCI (sex is not a shortcut there); Italian counts only; no sex data for MDVR-KCL |
 | Threshold tuned on test data | Choose the band cut on some speakers, score on others | done: "higher" 80% in-sample → 74% on other speakers |
+| Disease severity | Break held-out MDVR-KCL speakers down by Hoehn & Yahr stage (from file names) | done: milder PD scores close to healthy controls |
 | Medication state | Cannot test (NeuroVoz is medication-optimized) | limitation |
 | Small numbers | Speaker-level bootstrap CIs | done for all results above |
 
@@ -68,6 +69,8 @@ All numbers are collected in `results/metrics.json` (built by `experiments/expor
 **Threshold tuned on test data.** The "higher" cut of 0.6 was tuned until it was right 80% of the time on the held-out windows it is scored on. When the cut is chosen on some speakers and checked on others it is right about 74% of the time, and between 15% and 100% by fold, each fold resting on 4 to 7 speakers.
 
 **Small numbers.** MDVR-KCL has 16 PD speakers. Every headline number carries a 95% interval from resampling speakers, and the intervals are wide (for example window AUROC 0.716, interval 0.562 to 0.877).
+
+**Disease severity.** MDVR-KCL file names carry Hoehn & Yahr stage, the only subgroup label we have for the audio (age and sex are not released). Among the 16 PD speakers, the model's average held-out probability is 0.366 at stage 2 (2 of 8 above 0.5), 0.621 at stage 3 (5 of 6) and 0.734 at stage 4 (2 of 2), against 0.329 for the 21 healthy controls (none above 0.5) (`results/severity_check.csv`). So the model's score tracks severity, and milder Parkinson's sits close to the healthy range. The stage groups are tiny (8, 6 and 2 speakers), so treat this as a pattern to check, not a finding.
 
 **Medication state.** NeuroVoz patients were recorded in their medication-optimized state. We cannot test the effect of medication, so it is a limitation.
 

@@ -1,0 +1,5 @@
+group,hy_stage,pd_speakers,mean_probability,flagged_at_0_5,share_flagged
+PD by Hoehn & Yahr stage,2,8,0.366,2,0.25
+PD by Hoehn & Yahr stage,3,6,0.621,5,0.833
+PD by Hoehn & Yahr stage,4,2,0.734,2,1.0
+healthy controls,-,21,0.329,0,0.0

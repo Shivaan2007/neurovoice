@@ -20,7 +20,9 @@ Datasets are **never committed**. Download them yourself.
 
 - All files are 44.1 kHz WAV; resampled to 16 kHz for features.
 - No duplicate files (SHA-1 check); every speaker ID has one label.
-- Age and sex are not in the file names or release, so they are blank in the manifest.
+- Age and sex are not in the file names or release, so they are blank in the manifest. The Zenodo record lists a single file (`26_29_09_2017_KCL.zip`) and no separate metadata sheet (checked 2026-11-23).
+- Facts from the Zenodo description (record 2867216, CC BY 4.0, checked 2026-11-23): recorded at King's College London Hospital, 26-29 September 2017, in a roughly 10 m² examination room, on a Motorola Moto G4 phone held to the ear (44.1 kHz, 16 bit), by participants reading "The North Wind and the Sun" (some also a second passage), then a spontaneous dialogue.
+- File names carry clinician ratings: `IDnn_<hc|pd>_<Hoehn & Yahr>_<UPDRS II-5>_<UPDRS III-18>`. These are the only subgroup labels we have for the audio; see `results/severity_check.csv`. One healthy control (ID31) has a non-zero rating and some PD speakers are rated 0, which the authors say means a rater could not hear voice change, not that labels are ambiguous.
 
 ## Italian Parkinson's Voice and Speech (from `data/manifest.csv`, built 2026-11-22)
 
