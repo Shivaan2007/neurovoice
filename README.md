@@ -37,13 +37,30 @@ Our Cal Hacks 12.0 (Oct 2025) prototype claimed 87%. The code is lost, so we can
 
 | Check | How we test | Status |
 |---|---|---|
-| Age | Rerun without Italian young controls (19-29); age-only baseline | planned |
-| Recording conditions | Classifier predicting which dataset a clip came from | planned |
+| Age | Rerun without Italian young controls (19-29); age-only baseline | done (Italian): age alone scores 0.74 with young controls, 0.56 without |
+| Recording conditions | Classifier predicting which dataset a clip came from | partly done: Italian PD and controls differ in recording; dataset classifier needs two datasets together |
 | Segment leakage | 5 s windows of MDVR-KCL, grouped vs random split | done: 0.972 → 0.738 |
 | Recording leakage | UCI, 3 recordings per subject, grouped vs random split | done: 0.949 → 0.832 |
-| Sex balance | Sex counts per class; subgroup AUROC | planned |
+| Sex balance | Sex counts per class; subgroup AUROC | counts done for Italian; no sex data for MDVR-KCL, so no subgroup AUROC yet |
+| Threshold tuned on test data | Choose the band cut on some speakers, score on others | done: "higher" 80% in-sample → 74% on other speakers |
 | Medication state | Cannot test (NeuroVoz is medication-optimized) | limitation |
 | Small numbers | Speaker-level bootstrap CIs | done for all results above |
+
+All numbers are collected in `results/metrics.json` (built by `experiments/export_metrics.py` from the results files).
+
+**Age.** The Italian healthy group mixes 22 elderly (60-77) and 15 young (19-29) controls, while PD speakers are 40-80, so a model could learn "young voice = healthy". Age alone separates the groups with AUROC 0.74 when young controls are included and 0.56 without them, so the headline runs exclude them. The models still score 0.96 to 1.0 either way, which means age is not what drives that score; the recording differences below are.
+
+**Recording conditions.** In the Italian set every control was recorded at 16 kHz in 2017, while all the 44.1 kHz files and the whole 2016 session are PD. Even with young controls removed and only 16 kHz files kept (36 speakers), every model reaches AUROC 1.0 and a single feature (mean of MFCC 8, which mostly reflects microphone and room) separates PD from healthy on its own. Real speech differences do not separate this cleanly, so those scores reflect how the files were made. We use the Italian set only to show the confound and as a test set, never to train the demo model. We have not yet trained a classifier to guess which dataset a clip came from, which needs two datasets loaded together.
+
+**Segment and recording leakage.** Cutting MDVR-KCL read text into 5 s windows and splitting at random puts the same person in train and test: Random Forest AUROC 0.972 against 0.738 when split by speaker, a gap of 0.23. UCI, with 3 recordings per subject, shows the same direction at a smaller size (0.949 against 0.832). This shows one common way hackathon-style numbers get inflated; we do not claim it is what our original version did.
+
+**Sex balance.** Italian speakers by sex (F/M): young controls 2/13, elderly controls 12/10, PD 9/16, so sex differs by class and could act as a shortcut. MDVR-KCL ships without age or sex, so we cannot check it there, and no subgroup AUROC has been run.
+
+**Threshold tuned on test data.** The "higher" cut of 0.6 was tuned until it was right 80% of the time on the held-out windows it is scored on. When the cut is chosen on some speakers and checked on others it is right about 74% of the time, and between 15% and 100% by fold, each fold resting on 4 to 7 speakers.
+
+**Small numbers.** MDVR-KCL has 16 PD speakers. Every headline number carries a 95% interval from resampling speakers, and the intervals are wide (for example window AUROC 0.716, interval 0.562 to 0.877).
+
+**Medication state.** NeuroVoz patients were recorded in their medication-optimized state. We cannot test the effect of medication, so it is a limitation.
 
 ## Data
 
