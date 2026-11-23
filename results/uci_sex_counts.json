@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "healthy": {
+      "female": 41,
+      "male": 23
+    },
+    "PD": {
+      "female": 81,
+      "male": 107
+    }
+  },
+  "share_male_by_class": {
+    "healthy": 0.359,
+    "PD": 0.569
+  },
+  "n_subjects": 252
+}

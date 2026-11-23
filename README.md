@@ -41,7 +41,7 @@ Our Cal Hacks 12.0 (Oct 2025) prototype claimed 87%. The code is lost, so we can
 | Recording conditions | Classifier predicting which dataset a clip came from | partly done: Italian PD and controls differ in recording; dataset classifier needs two datasets together |
 | Segment leakage | 5 s windows of MDVR-KCL, grouped vs random split | done: 0.972 → 0.738 |
 | Recording leakage | UCI, 3 recordings per subject, grouped vs random split | done: 0.949 → 0.832 |
-| Sex balance | Sex counts per class; subgroup AUROC | counts done for Italian; no sex data for MDVR-KCL, so no subgroup AUROC yet |
+| Sex balance | Sex counts per class; subgroup AUROC | done on UCI (sex is not a shortcut there); Italian counts only; no sex data for MDVR-KCL |
 | Threshold tuned on test data | Choose the band cut on some speakers, score on others | done: "higher" 80% in-sample → 74% on other speakers |
 | Medication state | Cannot test (NeuroVoz is medication-optimized) | limitation |
 | Small numbers | Speaker-level bootstrap CIs | done for all results above |
@@ -54,7 +54,7 @@ All numbers are collected in `results/metrics.json` (built by `experiments/expor
 
 **Segment and recording leakage.** Cutting MDVR-KCL read text into 5 s windows and splitting at random puts the same person in train and test: Random Forest AUROC 0.972 against 0.738 when split by speaker, a gap of 0.23. UCI, with 3 recordings per subject, shows the same direction at a smaller size (0.949 against 0.832). This shows one common way hackathon-style numbers get inflated; we do not claim it is what our original version did.
 
-**Sex balance.** Italian speakers by sex (F/M): young controls 2/13, elderly controls 12/10, PD 9/16, so sex differs by class and could act as a shortcut. MDVR-KCL ships without age or sex, so we cannot check it there, and no subgroup AUROC has been run.
+**Sex balance.** Italian speakers by sex (F/M): young controls 2/13, elderly controls 12/10, PD 9/16, so sex differs by class and could act as a shortcut. MDVR-KCL ships without age or sex, so we cannot check it there. UCI does record sex, and it is imbalanced too: 57% of PD subjects are men against 36% of healthy ones. We tested it there with a subject-grouped Random Forest: sex alone scores AUROC 0.565 (95% CI 0.488-0.650, about chance), adding the gender column changes nothing (0.833 against 0.832 without it), and without gender the model scores 0.811 for men and 0.835 for women (`results/uci_sex_check.csv`). So sex is not a shortcut on UCI. That does not carry over to the audio datasets, where we have no sex labels for MDVR-KCL.
 
 **Threshold tuned on test data.** The "higher" cut of 0.6 was tuned until it was right 80% of the time on the held-out windows it is scored on. When the cut is chosen on some speakers and checked on others it is right about 74% of the time, and between 15% and 100% by fold, each fold resting on 4 to 7 speakers.
 

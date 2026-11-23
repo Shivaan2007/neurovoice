@@ -73,5 +73,62 @@
     "note": "perfect scores reflect recording differences, not PD detection",
     "source": "results/italian_baseline.csv"
   },
+  "uci_sex_check": {
+    "table": [
+      {
+        "model": "sex only",
+        "subgroup": "all",
+        "auroc": 0.565,
+        "ci95": "0.488-0.650",
+        "subjects": 252
+      },
+      {
+        "model": "all features incl. gender",
+        "subgroup": "all",
+        "auroc": 0.833,
+        "ci95": "0.781-0.882",
+        "subjects": 252
+      },
+      {
+        "model": "all features without gender",
+        "subgroup": "all",
+        "auroc": 0.832,
+        "ci95": "0.779-0.880",
+        "subjects": 252
+      },
+      {
+        "model": "all features without gender",
+        "subgroup": "men",
+        "auroc": 0.811,
+        "ci95": "0.734-0.877",
+        "subjects": 130
+      },
+      {
+        "model": "all features without gender",
+        "subgroup": "women",
+        "auroc": 0.835,
+        "ci95": "0.755-0.900",
+        "subjects": 122
+      }
+    ],
+    "counts": {
+      "counts": {
+        "healthy": {
+          "female": 41,
+          "male": 23
+        },
+        "PD": {
+          "female": 81,
+          "male": 107
+        }
+      },
+      "share_male_by_class": {
+        "healthy": 0.359,
+        "PD": 0.569
+      },
+      "n_subjects": 252
+    },
+    "source": "results/uci_sex_check.csv"
+  },
   "unseen_dataset": "pending: run experiments/cross_dataset.py with Italian data"
 }

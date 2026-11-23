@@ -5,9 +5,9 @@ Datasets are **never committed**. Download them yourself.
 | Dataset | Language | Task used | Source | License note |
 |---|---|---|---|---|
 | MDVR-KCL | English | Read text (smartphone); spontaneous dialogue also present, unused | [Zenodo 2867216](https://zenodo.org/records/2867216): `26_29_09_2017_KCL.zip` (606 MB), unzip into `data/raw/mdvr_kcl/` | CC BY 4.0 (per Zenodo); trained weights may be shared |
-| Italian Parkinson's Voice and Speech | Italian | Read text (B1/B2); vowels, syllables, phrases also parsed | [IEEE DataPort](https://ieee-dataport.org/open-access/italian-parkinsons-voice-and-speech) (free login, DOI 10.21227/aw6b-tg17): zip (593 MB), unzip into `data/raw/italian/` | TODO: confirm on the live page (listed as Creative Commons Attribution). **Recording confound, see below** |
+| Italian Parkinson's Voice and Speech | Italian | Read text (B1/B2); vowels, syllables, phrases also parsed | [IEEE DataPort](https://ieee-dataport.org/open-access/italian-parkinsons-voice-and-speech) (free login, DOI 10.21227/aw6b-tg17): zip (593 MB), unzip into `data/raw/italian/` | Creative Commons Attribution (per the IEEE DataPort page, checked 2026-11-23; version not stated). **Recording confound, see below** |
 | NeuroVoz | Spanish | Repeated sentences (listen-and-repeat) | NeuroVoz corpus | CC BY-NC-ND: evaluation only, no trained weights shared until confirmed |
-| UCI Parkinson's Disease Classification | Turkish speakers, sustained /a/ | Tabular features (leakage demo): 756 recordings, 252 subjects (188 PD, 64 healthy), 3 per subject, 753 feature columns (incl. gender) besides `id` and `class`. The download is a zip holding a `.rar`; Windows `tar -xf` extracts it | [UCI #470](https://archive.ics.uci.edu/dataset/470); unzip `pd_speech_features.csv` into `data/raw/uci/` | TODO: confirm license on the UCI page |
+| UCI Parkinson's Disease Classification | Turkish speakers, sustained /a/ | Tabular features (leakage demo): 756 recordings, 252 subjects (188 PD, 64 healthy), 3 per subject, 753 feature columns (incl. gender) besides `id` and `class`. The download is a zip holding a `.rar`; Windows `tar -xf` extracts it | [UCI #470](https://archive.ics.uci.edu/dataset/470); unzip `pd_speech_features.csv` into `data/raw/uci/` | CC BY 4.0 (per the UCI page, checked 2026-11-23) |
 
 ## MDVR-KCL (from `data/manifest.csv`, built 2026-11-22)
 
