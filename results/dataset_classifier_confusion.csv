@@ -1,5 +1,5 @@
-,pred_mdvr_kcl,pred_italian,model
-true_mdvr_kcl,847,154,logreg
-true_italian,124,1481,logreg
-true_mdvr_kcl,857,144,random_forest
-true_italian,75,1530,random_forest
+,pred_italian,pred_mdvr_kcl,model
+true_italian,1481,124,logreg
+true_mdvr_kcl,154,847,logreg
+true_italian,1537,68,random_forest
+true_mdvr_kcl,151,850,random_forest

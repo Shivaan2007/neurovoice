@@ -9,9 +9,9 @@
     },
     "uci_3_recordings_per_subject": {
       "naive_random_auroc": 0.949,
-      "subject_grouped_auroc": 0.832,
-      "subject_grouped_ci95": "0.779-0.882",
-      "inflation": 0.117,
+      "subject_grouped_auroc": 0.833,
+      "subject_grouped_ci95": "0.781-0.882",
+      "inflation": 0.116,
       "source": "results/uci_leakage.csv"
     }
   },
@@ -198,10 +198,10 @@
     {
       "model": "random_forest",
       "window_accuracy": 0.916,
-      "accuracy_ci95": "0.868-0.953",
-      "balanced_accuracy": 0.905,
-      "balanced_ci95": "0.857-0.946",
-      "speaker_accuracy": 0.929,
+      "accuracy_ci95": "0.867-0.956",
+      "balanced_accuracy": 0.903,
+      "balanced_ci95": "0.854-0.946",
+      "speaker_accuracy": 0.918,
       "chance_majority_class": 0.616,
       "windows": 2606,
       "speakers": 98
