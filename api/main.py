@@ -15,6 +15,7 @@ from neurovoice.config import (
     SAMPLE_RATE,
 )
 from neurovoice.predict import predict
+from neurovoice.speech_check import NotSpeechError
 
 app = FastAPI(title="NeuroVoice (research prototype)")
 
@@ -61,7 +62,10 @@ def predict_endpoint(file: UploadFile = File(...)):
         if dur < MIN_SECONDS or dur > MAX_SECONDS:
             raise HTTPException(
                 400, f"Clip must be {MIN_SECONDS:.0f} to {MAX_SECONDS:.0f} seconds long.")
-        return predict(dst)
+        try:
+            return predict(dst)
+        except NotSpeechError as e:  # tone, music, noise or silence: don't score it
+            raise HTTPException(422, str(e)) from e
     finally:  # uploaded audio is deleted right after prediction
         for p in (src, dst):
             if p and os.path.exists(p):
