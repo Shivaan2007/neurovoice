@@ -1,0 +1,16 @@
+# Never ship datasets (licenses; Italian folders are named after participants)
+data/
+*.wav
+*.mp3
+*.flac
+*.m4a
+# Local tooling and scratch
+.git/
+.github/
+.venv/
+.pytest_cache/
+.ruff_cache/
+**/__pycache__/
+build/
+experiments/log.csv
+issue-work-split.md
