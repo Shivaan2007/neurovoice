@@ -6,6 +6,7 @@ A screening-support **research prototype**. It is not a diagnostic tool and has 
 
 - **Type:** Random Forest (300 trees) with sigmoid calibration (`CalibratedClassifierCV`, speaker-grouped folds).
 - **Input:** a 5-30 s voice clip, read aloud. It is resampled to 16 kHz mono, trimmed, and cut into 5 s windows.
+- **Speech check:** before scoring, clips that are clearly not speech (steady tones, even-volume music, noise, silence) are rejected using voiced share, pitch movement and loudness variation (`neurovoice/speech_check.py`, `results/speech_check.csv`). It is a guard against mistakes, not against deliberate attempts to fool it.
 - **Features per window:** 48 hand-built acoustic features: MFCC 1-13 (mean, std, delta mean), pitch (mean, std, range via pyin), RMS, spectral centroid, zero-crossing rate, Praat jitter, shimmer, HNR.
 - **Output:** the average calibrated probability over the clip's windows, plus a band:
   - `higher`: probability > 0.6

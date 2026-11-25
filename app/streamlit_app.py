@@ -37,8 +37,8 @@ st.warning("Screening-support research prototype. Not a diagnosis. Trained on En
            "speech from 37 people in one dataset; not tested on other languages, microphones "
            "or rooms; no clinical validation. Talk to a doctor with any concerns.")
 st.write("In a quiet room, read a sentence or two aloud at your normal pace for 5 to 20 seconds. "
-         "Only speech works: the model has never heard other sounds, so music, tones or "
-         "silence give meaningless results.")
+         "Only speech works: the model has never heard other sounds, so clips that don't "
+         "sound like someone talking (music, tones, noise, silence) are turned away.")
 audio = st.audio_input("Record") or st.file_uploader("...or upload", type=["wav", "mp3", "m4a", "webm"])
 if audio is not None:
     try:

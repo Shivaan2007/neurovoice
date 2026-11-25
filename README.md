@@ -113,7 +113,7 @@ uvicorn api.main:app --port 8000 &
 streamlit run app/streamlit_app.py
 ```
 
-The app uses `models/model.joblib` (Random Forest trained on MDVR-KCL). If the model files are missing it falls back to a stub (0.5, "uncertain"). Clips must be 5 to 30 seconds.
+The app uses `models/model.joblib` (Random Forest trained on MDVR-KCL). If the model files are missing it falls back to a stub (0.5, "uncertain"). Clips must be 5 to 30 seconds. Before scoring, a speech check (`neurovoice/speech_check.py`) rejects clips that are clearly not someone talking, such as tones, music played at an even volume, noise or silence, because the model has never heard those. It accepted every real recording we have, PD and healthy, and rejected every synthetic non-speech sound we tried (`results/speech_check.csv`, from `python -m experiments.speech_check_calibration`); the limits were set on that same set, and a singing voice can still pass.
 
 ## Layout
 

@@ -1,5 +1,4 @@
 import json
-import wave
 
 import numpy as np
 import pandas as pd
@@ -8,6 +7,7 @@ from neurovoice.config import SAMPLE_RATE
 from neurovoice.features import features_from_signal
 from neurovoice.predict import band_for, predict
 from neurovoice.train import crossfit_thresholds, pick_thresholds, speaker_level, train
+from tests.synth import speechlike, wav_bytes
 
 
 def test_thresholds_on_well_separated_probabilities():
@@ -33,13 +33,9 @@ def test_speaker_level_one_row_per_speaker():
     assert list(sy) == [1, 0] and list(sp) == [0.4, 0.1]
 
 
-def _sine_wav(path, seconds):
-    t = np.arange(int(SAMPLE_RATE * seconds)) / SAMPLE_RATE
-    with wave.open(str(path), "wb") as w:
-        w.setnchannels(1)
-        w.setsampwidth(2)
-        w.setframerate(SAMPLE_RATE)
-        w.writeframes((np.sin(2 * np.pi * 150 * t) * 8000).astype("<i2").tobytes())
+def _speech_wav(path, seconds):
+    # speech-like, so it passes the speech check that predict() runs first
+    path.write_bytes(wav_bytes(speechlike(seconds)))
 
 
 def test_train_saves_model_that_predict_uses(tmp_path):
@@ -60,7 +56,7 @@ def test_train_saves_model_that_predict_uses(tmp_path):
     assert 0.0 <= meta["low"] <= meta["high"] <= 1.0
 
     wav = tmp_path / "clip.wav"
-    _sine_wav(wav, 11)  # two full 5 s windows
+    _speech_wav(wav, 11)  # two full 5 s windows
     out = predict(str(wav), model_path, meta_path)
     assert 0.0 <= out["probability"] <= 1.0
     assert out["band"] in {"lower", "uncertain", "higher"}

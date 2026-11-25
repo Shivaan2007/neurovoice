@@ -3,6 +3,10 @@
 With a model, the clip is cut into the same 5 s windows used in training, each window is
 scored, and the probabilities are averaged. Bands come from thresholds in meta.json that
 train.py chose on held-out predictions.
+
+Before scoring, neurovoice.speech_check rejects clips that are clearly not someone talking
+(tones, music, noise, silence) by raising NotSpeechError; the model has never heard
+those, so any probability for them would be meaningless.
 """
 import json
 
@@ -17,7 +21,7 @@ def band_for(p: float, low: float, high: float) -> str:
     return "lower" if p < low else "higher" if p > high else "uncertain"
 
 
-def predict(path: str, model_path=None, meta_path=None) -> dict:
+def predict(path: str, model_path=None, meta_path=None, check_speech=True) -> dict:
     model_path, meta_path = model_path or MODEL_PATH, meta_path or META_PATH
     if not (model_path.exists() and meta_path.exists()):
         return {"probability": 0.5, "band": "uncertain",
@@ -29,7 +33,10 @@ def predict(path: str, model_path=None, meta_path=None) -> dict:
     meta = json.loads(meta_path.read_text())
     model = joblib.load(model_path)
     y = load_audio(path)
-    feats = window_features(y, meta.get("window_seconds", 5)) or [features_from_signal(y)]
+    if check_speech:
+        from neurovoice.speech_check import check_speech as _check
+        _check(y)  # raises NotSpeechError
+    feats =window_features(y, meta.get("window_seconds", 5)) or [features_from_signal(y)]
     x = np.array([[f[k] for k in meta["feature_names"]] for f in feats])
     p = float(model.predict_proba(x)[:, 1].mean())
     return {"probability": p, "band": band_for(p, meta["low"], meta["high"]),
