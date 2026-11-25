@@ -36,7 +36,9 @@ st.title("NeuroVoice")
 st.warning("Screening-support research prototype. Not a diagnosis. Trained on English "
            "speech from 37 people in one dataset; not tested on other languages, microphones "
            "or rooms; no clinical validation. Talk to a doctor with any concerns.")
-st.write("In a quiet room, read a sentence or two aloud at your normal pace for 5 to 20 seconds.")
+st.write("In a quiet room, read a sentence or two aloud at your normal pace for 5 to 20 seconds. "
+         "Only speech works: the model has never heard other sounds, so music, tones or "
+         "silence give meaningless results.")
 audio = st.audio_input("Record") or st.file_uploader("...or upload", type=["wav", "mp3", "m4a", "webm"])
 if audio is not None:
     try:
