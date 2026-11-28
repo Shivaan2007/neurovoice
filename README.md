@@ -87,7 +87,7 @@ All numbers are collected in `results/metrics.json` (built by `experiments/expor
 
 ## Data
 
-MDVR-KCL (Zenodo), Italian Parkinson's Voice and Speech (IEEE DataPort), NeuroVoz (CC BY-NC-ND, evaluation only), UCI Parkinson's Disease Classification. Common task: connected speech. See [docs/data_card.md](docs/data_card.md). Datasets are never committed.
+MDVR-KCL (Zenodo), Italian Parkinson's Voice and Speech (IEEE DataPort), NeuroVoz (access by request under a Data Usage Agreement, evaluation only), UCI Parkinson's Disease Classification. Common task: connected speech. See [docs/data_card.md](docs/data_card.md). Datasets are never committed.
 
 ## Methods
 
@@ -125,7 +125,7 @@ Small cohorts, one language in the deployed model (three across the datasets we 
 
 ## Status
 
-Done: scaffold, both leakage demos, first trained model (MDVR-KCL) in the app. Also done: error analysis and SHAP, calibration before/after, wav2vec2 comparison on MDVR-KCL, Italian loader and recording-confound finding. Also done: the first unseen-dataset test (MDVR-KCL to Italian) and the dataset-classifier check. Next: NeuroVoz loader and tests (needs that data), sex subgroup AUROC on audio (needs sex labels for MDVR-KCL), public deployment.
+Done: scaffold, both leakage demos, first trained model (MDVR-KCL) in the app. Also done: error analysis and SHAP, calibration before/after, wav2vec2 comparison on MDVR-KCL, Italian loader and recording-confound finding. Also done: the first unseen-dataset test (MDVR-KCL to Italian) and the dataset-classifier check. Also done: the full pipeline run end to end (`make reproduce-all`), a NeuroVoz loader written from the paper's layout (not yet run on real files), a speech check that turns away clips that are not speech, and the Hugging Face Space files. Next: run the NeuroVoz loader and the third-dataset test once access is granted, sex subgroup AUROC on audio (needs sex labels for MDVR-KCL), publish the Space.
 
 ## License
 
