@@ -65,4 +65,4 @@ In plain terms: when this model is unsure, it says so, and it currently cannot r
 
 - Uploaded audio is deleted right after prediction.
 - The app shows a research-prototype notice with every result.
-- NeuroVoz (CC BY-NC-ND) is not used to train any shared weights.
+- NeuroVoz (access by request under a Data Usage Agreement) is not used to train any shared weights.
